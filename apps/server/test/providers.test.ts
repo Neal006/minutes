@@ -171,7 +171,7 @@ test('OpenRouter errors: concise message, and only transient ones are retryable'
 
 test('local Whisper validates input before loading the model', async () => {
   const stt = localStt({});
-  assert.throws(() => stt.transcribe(Buffer.from('webm'), 'audio/webm'), /needs 16-bit PCM WAV/);
+  assert.throws(() => stt.transcribe(Buffer.from('webm'), 'audio/webm'), (e: Error & { retryable?: boolean }) => /needs 16-bit PCM WAV/.test(e.message) && e.retryable === false);
   const wav44k = encodeWav(Buffer.alloc(44_100 * 2), 44_100);
   assert.throws(() => stt.transcribe(wav44k, 'audio/wav'), /needs 16 kHz/);
 });

@@ -19,8 +19,11 @@ const { app, pipeline } = createApp({
 pipeline.recover();
 
 const port = Number(process.env.PORT ?? 3001);
-app.listen(port, () => {
-  console.log(`Minutes API on http://localhost:${port}  (data: ${dataDir})`);
+// The app has no login of its own, so it only listens on loopback unless told otherwise
+// (the Docker image sets HOST=0.0.0.0; Cloudflare Access guards it there).
+const host = process.env.HOST ?? '127.0.0.1';
+app.listen(port, host, () => {
+  console.log(`Minutes API on http://${host === '127.0.0.1' ? 'localhost' : host}:${port}  (data: ${dataDir})`);
   console.log(`  AI providers → ${description}`);
   const needsKey = /openrouter/.test(description) && !process.env.OPENROUTER_API_KEY;
   if (needsKey) console.warn('  ! OPENROUTER_API_KEY not set — transcription/notes will fail (get a free key at https://openrouter.ai/keys, or set AI_PROVIDER=mock for a demo)');

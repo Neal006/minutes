@@ -30,8 +30,10 @@ export function localStt(env = process.env, onCall?: OnCall): Stt {
   return {
     transcribe(audio, mime) {
       const info = wavInfo(audio);
-      if (!info || info.bitsPerSample !== 16) throw new Error(`Local STT needs 16-bit PCM WAV (got ${mime})`);
-      if (info.sampleRate !== 16_000) throw new Error(`Local STT needs 16 kHz audio (got ${info.sampleRate} Hz)`);
+      // Wrong format won't fix itself on retry, so fail the chunk immediately.
+      const bad = (msg: string) => Object.assign(new Error(msg), { retryable: false });
+      if (!info || info.bitsPerSample !== 16) throw bad(`Local STT needs 16-bit PCM WAV (got ${mime})`);
+      if (info.sampleRate !== 16_000) throw bad(`Local STT needs 16 kHz audio (got ${info.sampleRate} Hz)`);
       const frames = Math.floor(info.dataLength / 2 / info.channels);
       const pcm = new Float32Array(frames);
       for (let i = 0; i < frames; i++) {
