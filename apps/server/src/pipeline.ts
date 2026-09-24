@@ -1,4 +1,4 @@
-import { readFile } from 'node:fs/promises';
+import { readFile, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { formatTs, parseTs, type Ai } from './ai.ts';
 import type { Db, Meeting } from './db.ts';
@@ -50,6 +50,9 @@ export function createPipeline({ db, ai, audioDir, retryDelaysMs = [1000, 4000],
           db.prepare("UPDATE chunks SET status = 'done', error = NULL WHERE meeting_id = ? AND seq = ?").run(meetingId, seq);
         })();
         lastError = undefined;
+        // The transcript is saved; the chunk file is only needed to retry failures. (Playback uses
+        // the separate full recording.) Keeps disk/backup ~8x smaller: WAV chunks are ~115 MB/hour.
+        await rm(chunkPath(audioDir, meetingId, seq), { force: true }).catch(() => {}); // best effort
         break;
       } catch (e) {
         lastError = e;

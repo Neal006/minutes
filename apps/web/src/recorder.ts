@@ -1,4 +1,5 @@
 import { api, ApiError } from './api.ts';
+import { toWav16k } from './wav.ts';
 
 /**
  * Records mic (+ optional system/tab audio) and streams it to the server.
@@ -66,6 +67,7 @@ class Recorder {
   private fullParts: Blob[] = [];
   private meterTimer: ReturnType<typeof setInterval> | undefined;
 
+  private converting = new Set<Promise<void>>();
   private queue: QueuedChunk[] = [];
   private pumping = false;
   private drained: (() => void)[] = [];
@@ -148,7 +150,13 @@ class Recorder {
     rec.ondataavailable = (e) => e.data.size && parts.push(e.data);
     rec.onstop = () => {
       const blob = new Blob(parts, { type: rec.mimeType || this.mime });
-      if (blob.size) this.enqueue({ seq, startMs, blob });
+      if (!blob.size) return;
+      // Convert to WAV for the STT providers; if the browser can't decode it, send the original.
+      const job = toWav16k(blob)
+        .catch(() => blob)
+        .then((b) => this.enqueue({ seq, startMs, blob: b }))
+        .finally(() => this.converting.delete(job));
+      this.converting.add(job);
     };
     rec.start();
     this.chunkRec = rec;
@@ -171,6 +179,7 @@ class Recorder {
     this.teardown();
 
     try {
+      await Promise.all(this.converting); // the last chunk is still being encoded
       await this.drain();
       if (full.size) {
         // Playback audio is nice-to-have; notes still get made if it can't be uploaded.

@@ -4,6 +4,10 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -12,10 +16,46 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
+        with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run e2e # downloads Obscura, runs user flows in Obscura + recording in Chromium
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with: { name: e2e-report, path: e2e/report }
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t minutes:ci .
+      - name: Smoke test (mock AI, seeded data)
+        run: |
+          docker run -d --name minutes -p 3001:3001 -e AI_PROVIDER=mock minutes:ci
+          for i in $(seq 1 30); do curl -sf localhost:3001/api/health && break; sleep 1; done
+          docker exec minutes node_modules/.bin/tsx apps/server/src/seed.ts
+          curl -sf localhost:3001/api/meetings | grep -q "Pricing page redesign sync"
+          curl -sf "localhost:3001/api/search?q=billing" | grep -q "migration"
+          curl -sf localhost:3001/ | grep -q "<title>Minutes</title>"
+          docker logs minutes
+      - name: Publish multi-arch image to GHCR (main only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker buildx create --use
+          docker run --privileged --rm tonistiigi/binfmt --install arm64
+          docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/neal006/minutes:latest -t ghcr.io/neal006/minutes:${{ github.sha }} --push .

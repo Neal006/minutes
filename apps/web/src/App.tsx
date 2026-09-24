@@ -4,7 +4,7 @@ import { Home } from './pages/Home.tsx';
 import { MeetingPage } from './pages/Meeting.tsx';
 import { Search } from './pages/Search.tsx';
 import { recorder } from './recorder.ts';
-import { formatTs, navigate, useRoute } from './util.tsx';
+import { formatTs, interceptInternalLinks, navigate, useRoute } from './util.tsx';
 
 declare global {
   interface Window {
@@ -106,6 +106,7 @@ function SearchBox() {
 export function App() {
   const { parts } = useRoute();
   const rec = useRecorder();
+  useEffect(interceptInternalLinks, []);
 
   // Closing the tab mid-recording would lose the in-memory chunks; ask first.
   useEffect(() => {

@@ -193,7 +193,7 @@ test('silent meeting skips the LLM; a chunk that keeps failing does not block no
       return fakeAi().extract(t);
     },
   });
-  const { call, newMeeting, putChunk, waitStatus } = await start(ai);
+  const { call, newMeeting, putChunk, waitStatus, audioDir } = await start(ai);
 
   const silent = await newMeeting();
   await call('POST', `/meetings/${silent}/finish`, {});
@@ -208,6 +208,9 @@ test('silent meeting skips the LLM; a chunk that keeps failing does not block no
   const p = await waitStatus(partial, 'ready');
   assert.deepEqual(p.chunks, { total: 2, pending: 0, failed: 1 });
   assert.equal(p.segments.length, 1);
+  // Transcribed chunk files are deleted; the failed one is kept so "Retry" can use it.
+  assert.equal(existsSync(chunkPath(audioDir, partial, 0)), false);
+  assert.equal(existsSync(chunkPath(audioDir, partial, 1)), true);
 });
 
 test('input validation at the API boundary', async () => {

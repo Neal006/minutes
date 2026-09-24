@@ -24,10 +24,12 @@ items (with owners, due dates, and a link to the exact moment) when you hit stop
 
 ```bash
 npm install
-cp .env.example .env        # add ANTHROPIC_API_KEY and OPENAI_API_KEY (or a Groq/local Whisper endpoint)
+cp .env.example .env        # paste a free OPENROUTER_API_KEY (https://openrouter.ai/keys), and that's it
 npm run seed                # optional: 3 demo meetings, works without API keys
 npm run dev                 # API on :3001, web app on http://localhost:5173
 ```
+
+No key yet? `AI_PROVIDER=mock npm run dev` runs the whole app offline with a deterministic fake AI.
 
 Desktop app (captures system audio on Windows):
 
@@ -36,11 +38,37 @@ npm run build && npm start  # server also serves the built web app on :3001
 npm run desktop             # in a second terminal
 ```
 
+## AI providers: free by default
+
+With only `OPENROUTER_API_KEY` set, everything runs on **OpenRouter's free models** through the official
+[`@openrouter/sdk`](https://www.npmjs.com/package/@openrouter/sdk). Each job has a fallback chain, so a
+rate-limited or retired model falls through to the next one:
+
+| Job | Free models (in order) | How |
+|---|---|---|
+| Notes (title, summary, decisions, action items) and Ask | `nvidia/nemotron-3-super-120b-a12b:free` → `qwen/qwen3.8-27b:free` → `openrouter/free` | JSON-schema output validated with zod, one repair round |
+| Transcription | `thinkingmachines/inkling-small:free` → `thinkingmachines/inkling:free` → `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` | audio-capable chat models; the browser uploads 16 kHz WAV |
+
+The free lineup changes often. **`npm run models:free`** lists what's free right now and what each
+model can do (audio input, JSON schema), so you can override `OPENROUTER_MODELS` / `OPENROUTER_STT_MODELS`.
+Free models allow 20 requests/min and 50/day (1,000/day after a one-time $10 credit). For heavy
+transcription, Groq's free Whisper tier (8 h of audio/day) plugs in via `STT_PROVIDER=whisper`.
+Claude is one env var away (`AI_PROVIDER=anthropic`). See [`.env.example`](.env.example).
+
+## Testing
+
 | command | what |
 |---|---|
-| `npm test` | server tests: real HTTP + SQLite, fake AI (no network) |
-| `npm run typecheck` | server + web |
-| `npm run build` | production web build → `apps/web/dist` |
+| `npm test` | 12 server tests: real HTTP + SQLite with a fake AI, plus the OpenRouter adapter against a fake SDK client, WAV parsing and provider selection |
+| `npm run e2e` | 17 end-to-end tests: 11 user-behavior flows in the **[Obscura](https://github.com/h4ckf0r0day/obscura)** headless browser, plus recording and interaction tests in Chromium with a fake mic. See [`e2e/README.md`](e2e/README.md) |
+| `npm run case-studies` | 5 scripted meetings synthesized to speech and run through the real pipeline on OpenRouter free models, scored automatically. Results: [`docs/case-studies.md`](docs/case-studies.md) |
+| `npm run typecheck` / `npm run build` | server + web |
+
+## Deploying for $0
+
+Oracle Cloud Always Free VM + Cloudflare Tunnel/Access + Litestream→R2 backups + Groq/OpenRouter free
+AI, shipped by GitHub Actions as a multi-arch image. The full design (capacity math, security model,
+RPO/RTO, runbook) is in [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), and the stack is in [`deploy/`](deploy/).
 
 ## How it works
 
@@ -65,7 +93,11 @@ A few decisions worth calling out (the full reasoning is in [`docs/PLAN.md`](doc
 ## Project layout
 
 ```
-apps/server   Express + better-sqlite3 API, processing pipeline, Claude/Whisper adapters, tests
+apps/server   Express + better-sqlite3 API, processing pipeline, tests
+  src/providers  OpenRouter (default, free) · Anthropic · Whisper-compatible STT · mock
+  case-studies   5 scripted meetings → real pipeline → docs/case-studies.md
+e2e           Playwright suites: Obscura (user behavior) + Chromium (recording)
+deploy        docker-compose stack: app + Cloudflare Tunnel + Litestream + audio backup
 apps/web      React 19 + Vite app (recorder, meeting, search, ask)
 apps/desktop  Electron shell for system-audio capture
 docs/PLAN.md  the implementation plan: goals, data model, API, failure handling, roadmap

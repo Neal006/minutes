@@ -40,5 +40,23 @@ export function useRoute() {
 }
 
 export const navigate = (to: string) => {
-  location.hash = to;
+  // Same-document hash navigation in browsers; also works in engines where `location.hash = …`
+  // is a no-op (Obscura, which runs the e2e suite, does a full navigation instead).
+  location.href = `#${to}`;
 };
+
+/**
+ * Route plain left-clicks on in-app links through `navigate`, like react-router's <Link>.
+ * Modifier/middle clicks keep native behavior (open in new tab, etc.).
+ */
+export function interceptInternalLinks(): () => void {
+  const onClick = (e: MouseEvent) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const a = (e.target as Element | null)?.closest?.('a[href^="#/"]');
+    if (!a) return;
+    e.preventDefault();
+    navigate(a.getAttribute('href')!.slice(1));
+  };
+  document.addEventListener('click', onClick);
+  return () => document.removeEventListener('click', onClick);
+}
