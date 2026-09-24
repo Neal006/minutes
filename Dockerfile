@@ -22,7 +22,7 @@ RUN npm ci --omit=dev -w apps/server
 
 FROM node:22-bookworm-slim
 WORKDIR /app
-ENV NODE_ENV=production DATA_DIR=/data PORT=3001
+ENV NODE_ENV=production DATA_DIR=/data PORT=3001 MODEL_CACHE_DIR=/data/models
 COPY --from=server-deps /app/node_modules node_modules
 COPY apps/server/package.json apps/server/
 COPY apps/server/src apps/server/src

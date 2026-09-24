@@ -44,7 +44,11 @@ export type Ai = Stt & Llm;
 export const EXTRACT_SYSTEM = `You turn meeting transcripts into notes people act on.
 Be faithful to the transcript: never invent owners, dates, or decisions that weren't said.
 Transcripts come from speech recognition and may contain errors; prefer the obvious intended meaning.
-Write in plain, direct language. Use the transcript's own names and terms.`;
+Write in plain, direct language. Use the transcript's own names and terms.
+Action items are concrete tasks someone agreed to do; list each one once.
+Transcripts have no speaker labels. Infer an owner only from names in the text: "Jordan, can you own the fix?"
+followed by "Yes, I will..." means Jordan owns it. If the owner is unclear, use null; never write placeholders
+such as "Speaker", "Unspecified" or "Vendor".`;
 
 export const ANSWER_SYSTEM = `You answer questions about a team's past meetings using only the numbered transcript excerpts provided.
 Cite every claim with the excerpt number in square brackets, like [2] or [1][4].
@@ -70,6 +74,40 @@ export function formatTs(ms: number): string {
 export function parseTs(ts: string | null): number | null {
   if (!ts || !/^\d{1,2}(:\d{1,2}){1,2}$/.test(ts.trim())) return null;
   return ts.trim().split(':').reduce((acc, p) => acc * 60 + Number(p), 0) * 1000;
+}
+
+const PLACEHOLDER = /^(unspecified|unknown|unassigned|not specified|not stated|none|n\/?a|tbd|to be determined|speaker\b.*|vendor|someone|anyone|everyone|team|the team|we|us|i|me)$/i;
+const MAX_ITEMS = 25;
+
+/** "" / "Unspecified (likely the host)" / "TBD" → null. */
+function cleanField(v: string | null | undefined): string | null {
+  const t = (v ?? '').trim().replace(/\s*\(.*\)$/, '').trim();
+  return !t || PLACEHOLDER.test(t) ? null : t;
+}
+
+const dedupeKey = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+
+/**
+ * Provider-agnostic cleanup of model output, found necessary by the case studies: free models
+ * write placeholder owners, sometimes loop and repeat the same items, and once titled a meeting
+ * "postmortem.json". Schema validation can't catch any of that.
+ */
+export function cleanExtraction(x: Extraction): Extraction {
+  const seen = new Set<string>();
+  const unique = <T>(list: T[], key: (t: T) => string) =>
+    list.filter((t) => {
+      const k = dedupeKey(key(t));
+      if (!k || seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+  const decisions = unique(x.decisions.map((d) => d.trim()), (d) => d);
+  seen.clear();
+  const action_items = unique(x.action_items, (a) => a.text)
+    .slice(0, MAX_ITEMS)
+    .map((a) => ({ text: a.text.trim(), owner: cleanField(a.owner), due: cleanField(a.due), timestamp: a.timestamp }));
+  const title = x.title.trim().replace(/\.(json|md|txt)$/i, '').trim();
+  return { title: title || 'Untitled meeting', summary: x.summary.trim(), decisions: decisions.slice(0, MAX_ITEMS), action_items };
 }
 
 /** Models without native JSON mode wrap output in prose or ```json fences; take the outermost object. */

@@ -51,9 +51,14 @@ this needs. Free PaaS tiers that sleep or wipe the disk on redeploy would lose t
 | Image registry | GitHub Container Registry | Free for public images | — |
 | CI/CD | GitHub Actions | Free for public repos | Unit, e2e (Obscura + Chromium) and Docker smoke tests on every PR |
 
-> Transcription can also run on OpenRouter's free audio models (`STT_PROVIDER=openrouter`, what the
-> case studies use), but at one request per 20-second chunk the 50/day cap is only ~16 minutes of
-> audio. That's why Groq is the production default and OpenRouter the fallback.
+> **Transcription options, all $0:**
+> - **Groq Whisper** (recommended at team scale): fastest and most accurate, with 8 h of audio/day free.
+> - **Local Whisper on the VM** (`STT_PROVIDER=local`, the default with no STT key): whisper-base.en
+>   through transformers.js. No account, audio never leaves the VM. It measured ~2.3 s per 20 s chunk on
+>   a laptop CPU (the case studies use it), so the 2-OCPU VM keeps up with a couple of live meetings.
+> - **OpenRouter audio models** (`STT_PROVIDER=openrouter`): OpenRouter rejects audio requests with
+>   **402 unless the account holds ≥ $0.50**, even on `:free` models, and 50 requests/day would be only
+>   ~16 minutes of audio. Not a $0 option.
 
 Run `npm run models:free` to see which OpenRouter models are free *today*; the lineup changes
 weekly, and the defaults are a fallback chain, so one retired model doesn't break notes.
@@ -71,7 +76,7 @@ weekly, and the defaults are a fallback chain, so one retired model doesn't brea
 - **Authentication at the edge.** The app itself has no login, so Access is mandatory: create an Access application for the hostname with an allow-list (emails or your Google Workspace domain). Unauthenticated requests never reach the VM.
 - **Secrets** live only in `deploy/.env` on the VM (`chmod 600`). The public image contains no secrets; CI uses only the built-in `GITHUB_TOKEN`.
 - **App-level hardening already in place:** input validation, 25 MB upload cap, FTS query sanitizing, no HTML rendering of transcripts, sandboxed Electron with media permission limited to the app origin.
-- **Privacy:** audio and transcripts go to Groq/OpenRouter for processing. Free endpoints may log prompts under their providers' terms. If that's unacceptable, point `STT_BASE_URL` at a self-hosted faster-whisper on the same VM (it fits in 12 GB) and use a model with a zero-retention policy for notes.
+- **Privacy:** with Groq, audio leaves the VM; transcripts always go to OpenRouter for notes. Free endpoints may log prompts under their providers' terms. If that's unacceptable, use `STT_PROVIDER=local` (audio stays on the VM) and a model with a zero-retention policy for notes.
 
 ## 5. Reliability, backup and recovery
 
@@ -88,7 +93,7 @@ then `docker compose up -d`.
 ## 6. CI/CD
 
 ```
-PR  → check (typecheck, 12 unit/API tests, web build)
+PR  → check (typecheck, 16 unit/API tests, web build)
     → e2e (11 user flows in Obscura, 6 recording/interaction tests in Chromium)
     → docker (build + smoke test with the mock AI provider)
 main → same, then buildx pushes ghcr.io/neal006/minutes:{latest,<sha>} for amd64 + arm64

@@ -1,0 +1,1812 @@
+[
+  {
+    "id": "sprint-planning",
+    "title": "Sprint planning",
+    "durationSec": 66.885,
+    "chunkCount": 4,
+    "skippedSilentChunks": 0,
+    "wer": 0.07051282051282051,
+    "totalMs": 73932.9575,
+    "afterStopMs": 73835.2722,
+    "meeting": {
+      "id": "80b4c87d-d279-4348-b115-da5e7db49307",
+      "title": "Sprint Planning Meeting",
+      "title_locked": false,
+      "status": "ready",
+      "created_at": 1790232664166,
+      "duration_ms": 66885,
+      "summary": "Locked scope for the next two‑week sprint, prioritized the calendar sync bug, deferred dark‑mode work, and agreed on follow‑up actions for onboarding checklist and sync‑failure alerts.",
+      "decisions": [
+        "Calendar sync bug is the top issue and will be addressed first.",
+        "Dark‑mode work will be pushed to the next sprint.",
+        "Add an alert for sync‑failure spikes to catch issues earlier."
+      ],
+      "error": null,
+      "audio_mime": null,
+      "has_audio": false,
+      "segments": [
+        {
+          "id": 1,
+          "start_ms": 0,
+          "end_ms": 6000,
+          "text": "Morning everyone. The goal today is to lock the scope for the next two weeks sprint."
+        },
+        {
+          "id": 2,
+          "start_ms": 6000,
+          "end_ms": 14000,
+          "text": "The calendar sync bug is still our top issue. Customers see duplicate events after they reconnect Google Calendar."
+        },
+        {
+          "id": 3,
+          "start_ms": 14000,
+          "end_ms": 19000,
+          "text": "Then that goes first. Jordan, can you own the fix?"
+        },
+        {
+          "id": 4,
+          "start_ms": 20000,
+          "end_ms": 25000,
+          "text": "Yes, I will have a fix ready for review by Wednesday."
+        },
+        {
+          "id": 5,
+          "start_ms": 25000,
+          "end_ms": 27420,
+          "text": "The new onboarding checklist designs are done."
+        },
+        {
+          "id": 6,
+          "start_ms": 27420,
+          "end_ms": 30160,
+          "text": "I can hand off the final specs tomorrow."
+        },
+        {
+          "id": 7,
+          "start_ms": 30160,
+          "end_ms": 31640,
+          "text": "Great."
+        },
+        {
+          "id": 8,
+          "start_ms": 31640,
+          "end_ms": 37960,
+          "text": "We decided to push the dark mode work to next sprint, because the sink bug matters more."
+        },
+        {
+          "id": 9,
+          "start_ms": 37960,
+          "end_ms": 39320,
+          "text": "Agreed."
+        },
+        {
+          "id": 10,
+          "start_ms": 39320,
+          "end_ms": 46320,
+          "text": "I also want to make a difference between the two."
+        },
+        {
+          "id": 11,
+          "start_ms": 40000,
+          "end_ms": 44800,
+          "text": "to add an alert when sync failures spike, so we catch this earlier next time."
+        },
+        {
+          "id": 12,
+          "start_ms": 46080,
+          "end_ms": 52160,
+          "text": "Good idea, take that as well. I will update the roadmap and tell support about the timeline"
+        },
+        {
+          "id": 13,
+          "start_ms": 52160,
+          "end_ms": 58000,
+          "text": "today. One risk. The checklist needs copy from marketing, and they have not sent it yet."
+        },
+        {
+          "id": 14,
+          "start_ms": 58000,
+          "end_ms": 60000,
+          "text": "I will ask Marc to"
+        },
+        {
+          "id": 15,
+          "start_ms": 60000,
+          "end_ms": 62000,
+          "text": "marketing for the copy by Thursday."
+        },
+        {
+          "id": 16,
+          "start_ms": 62000,
+          "end_ms": 65000,
+          "text": "Okay, that is the plan."
+        },
+        {
+          "id": 17,
+          "start_ms": 65000,
+          "end_ms": 66000,
+          "text": "Thanks all."
+        }
+      ],
+      "action_items": [
+        {
+          "id": 1,
+          "meeting_id": "80b4c87d-d279-4348-b115-da5e7db49307",
+          "text": "Fix calendar sync bug",
+          "owner": "Jordan",
+          "due": "Wednesday",
+          "done": 0,
+          "start_ms": 20000
+        },
+        {
+          "id": 2,
+          "meeting_id": "80b4c87d-d279-4348-b115-da5e7db49307",
+          "text": "Hand off final onboarding checklist specs",
+          "owner": "",
+          "due": "tomorrow",
+          "done": 0,
+          "start_ms": 27000
+        },
+        {
+          "id": 4,
+          "meeting_id": "80b4c87d-d279-4348-b115-da5e7db49307",
+          "text": "Add alert for sync‑failure spikes",
+          "owner": "",
+          "due": "",
+          "done": 0,
+          "start_ms": 40000
+        },
+        {
+          "id": 3,
+          "meeting_id": "80b4c87d-d279-4348-b115-da5e7db49307",
+          "text": "Update roadmap and inform support about timeline",
+          "owner": "",
+          "due": "today",
+          "done": 0,
+          "start_ms": 46000
+        },
+        {
+          "id": 5,
+          "meeting_id": "80b4c87d-d279-4348-b115-da5e7db49307",
+          "text": "Request marketing copy for onboarding checklist from Marc",
+          "owner": "",
+          "due": "Thursday",
+          "done": 0,
+          "start_ms": 58000
+        }
+      ],
+      "chunks": {
+        "total": 4,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "asks": [
+      {
+        "q": "When will the calendar sync fix be ready for review?",
+        "keywords": [
+          "wednesday"
+        ],
+        "answer": "The calendar sync fix will be ready for review by Wednesday [1].",
+        "sources": [
+          {
+            "n": 1,
+            "meeting_id": "80b4c87d-d279-4348-b115-da5e7db49307",
+            "meeting_title": "Sprint Planning Meeting",
+            "start_ms": 20000,
+            "text": "Yes, I will have a fix ready for review by Wednesday."
+          }
+        ],
+        "ms": 2086.352899999998
+      }
+    ],
+    "calls": [
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 3836,
+        "caseId": "sprint-planning"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 3387,
+        "caseId": "sprint-planning"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 3268,
+        "caseId": "sprint-planning"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 1346,
+        "caseId": "sprint-planning"
+      },
+      {
+        "task": "notes",
+        "model": "nvidia/nemotron-3-super-120b-a12b:free",
+        "ms": 42104,
+        "caseId": "sprint-planning"
+      },
+      {
+        "task": "notes",
+        "model": "nvidia/nemotron-3-super-120b-a12b:free",
+        "ms": 19301,
+        "caseId": "sprint-planning"
+      },
+      {
+        "task": "answer",
+        "model": "poolside/laguna-xs-2.1:free",
+        "ms": 2081,
+        "caseId": "sprint-planning"
+      }
+    ],
+    "checks": [
+      {
+        "label": "Notes generated",
+        "pass": true
+      },
+      {
+        "label": "Transcript word error rate ≤ 20%",
+        "pass": true,
+        "detail": "7.1%"
+      },
+      {
+        "label": "Action item for Jordan about \"sync\"",
+        "pass": true,
+        "detail": "\"Fix calendar sync bug\""
+      },
+      {
+        "label": "Action item for Priya about \"spec\"",
+        "pass": false,
+        "detail": "not found"
+      },
+      {
+        "label": "Action item for Maya about \"marketing\"",
+        "pass": false,
+        "detail": "not found"
+      },
+      {
+        "label": "Decision about \"dark mode\"",
+        "pass": false,
+        "detail": "not found"
+      },
+      {
+        "label": "Owners are people from the meeting",
+        "pass": true
+      },
+      {
+        "label": "Ask: \"When will the calendar sync fix be ready for review?\"",
+        "pass": true,
+        "detail": "answer mentions wednesday; cites this meeting"
+      }
+    ]
+  },
+  {
+    "id": "customer-discovery",
+    "title": "Customer discovery call",
+    "durationSec": 67.795,
+    "chunkCount": 4,
+    "skippedSilentChunks": 0,
+    "wer": 0.02976190476190476,
+    "totalMs": 52632.8183,
+    "afterStopMs": 51393.129100000006,
+    "meeting": {
+      "id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+      "title": "Discussion on Meeting Notes Tool for Support Team",
+      "title_locked": false,
+      "status": "ready",
+      "created_at": 1790232738071,
+      "duration_ms": 67795,
+      "summary": "Dana's support team handles 40 customer calls daily and lacks time for manual notes, causing important details like bug reproduction steps to be lost. They need a meeting notes tool that automatically captures bug details and action items into Zendesk. A hard requirement is that all data must remain in the European Union. The vendor does not currently have a European region but plans to add one. The vendor will confirm the EU region launch date with engineers and email Dana by Friday. If data residency is resolved, Dana wants a pilot with 10 agents next month. The vendor will also send a security questionnaire today, and Dana will bring Marco from legal to the next call.",
+      "decisions": [
+        "Proceed with a pilot of 10 agents next month if EU data residency requirement is met",
+        "Vendor will confirm European region launch date and email Dana by Friday"
+      ],
+      "error": null,
+      "audio_mime": null,
+      "has_audio": false,
+      "segments": [
+        {
+          "id": 18,
+          "start_ms": 0,
+          "end_ms": 5600,
+          "text": "Thanks for joining, Dana. What made you start looking for a meeting notes tool?"
+        },
+        {
+          "id": 19,
+          "start_ms": 5600,
+          "end_ms": 12320,
+          "text": "Our support team runs about 40 customer calls a day, and nobody has time to write notes."
+        },
+        {
+          "id": 20,
+          "start_ms": 12320,
+          "end_ms": 15600,
+          "text": "Important details get lost."
+        },
+        {
+          "id": 21,
+          "start_ms": 15600,
+          "end_ms": 19120,
+          "text": "What happens today when a customer reports a bug on a call?"
+        },
+        {
+          "id": 22,
+          "start_ms": 19120,
+          "end_ms": 20120,
+          "text": "The agent types."
+        },
+        {
+          "id": 23,
+          "start_ms": 20000,
+          "end_ms": 26440,
+          "text": "a quick summary into Zendisk, but half the time the steps to reproduce are missing."
+        },
+        {
+          "id": 24,
+          "start_ms": 26440,
+          "end_ms": 31360,
+          "text": "So the key requirement is getting bug details and action items into Zendisk automatically."
+        },
+        {
+          "id": 25,
+          "start_ms": 31360,
+          "end_ms": 33040,
+          "text": "Exactly."
+        },
+        {
+          "id": 26,
+          "start_ms": 33040,
+          "end_ms": 37000,
+          "text": "And all of our data must stay in the European Union."
+        },
+        {
+          "id": 27,
+          "start_ms": 37000,
+          "end_ms": 39360,
+          "text": "That is a hard requirement from our legal team."
+        },
+        {
+          "id": 28,
+          "start_ms": 40000,
+          "end_ms": 45000,
+          "text": "Understood. We do not have a European region yet, but it is on our roadmap."
+        },
+        {
+          "id": 29,
+          "start_ms": 45000,
+          "end_ms": 49000,
+          "text": "I will confirm the date with our engineers and email you by Friday."
+        },
+        {
+          "id": 30,
+          "start_ms": 49000,
+          "end_ms": 57000,
+          "text": "Please do. If data residency works out, we would want a pilot with 10 agents next month."
+        },
+        {
+          "id": 31,
+          "start_ms": 57000,
+          "end_ms": 61000,
+          "text": "Great. I will also send over our security questions."
+        },
+        {
+          "id": 32,
+          "start_ms": 60000,
+          "end_ms": 61000,
+          "text": "questionnaire today."
+        },
+        {
+          "id": 33,
+          "start_ms": 61000,
+          "end_ms": 62000,
+          "text": "Perfect."
+        },
+        {
+          "id": 34,
+          "start_ms": 62000,
+          "end_ms": 66560,
+          "text": "I will bring Marco from our legal team to the next call."
+        }
+      ],
+      "action_items": [
+        {
+          "id": 6,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Confirm European region launch date with engineers and email Dana by Friday",
+          "owner": "Vendor",
+          "due": "Friday",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 7,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Send security questionnaire to Dana",
+          "owner": "Vendor",
+          "due": "Today",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 8,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Bring Marco from legal team to the next call",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 9,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Proceed with pilot of 10 agents next month if EU region is available",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 10,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Confirm EU region launch date",
+          "owner": "Vendor",
+          "due": "Friday",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 11,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Send security questionnaire",
+          "owner": "Vendor",
+          "due": "Today",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 12,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Bring Marco from legal to next call",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 13,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Pilot with 10 agents next month",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 14,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Confirm EU region launch date",
+          "owner": "Vendor",
+          "due": "Friday",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 15,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Send security questionnaire",
+          "owner": "Vendor",
+          "due": "Today",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 16,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Bring Marco from legal to next call",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 17,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Pilot with 10 agents next month",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 18,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Confirm EU region launch date",
+          "owner": "Vendor",
+          "due": "Friday",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 19,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Send security questionnaire",
+          "owner": "Vendor",
+          "due": "Today",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 20,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Bring Marco from legal to next call",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 21,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Pilot with 10 agents next month",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 22,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Confirm EU region launch date",
+          "owner": "Vendor",
+          "due": "Friday",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 23,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Send security questionnaire",
+          "owner": "Vendor",
+          "due": "Today",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 24,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Bring Marco from legal to next call",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 25,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Pilot with 10 agents next month",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 26,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Confirm EU region launch date",
+          "owner": "Vendor",
+          "due": "Friday",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 27,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Send security questionnaire",
+          "owner": "Vendor",
+          "due": "Today",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 28,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Bring Marco from legal to next call",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 29,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Pilot with 10 agents next month",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 30,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Confirm EU region launch date",
+          "owner": "Vendor",
+          "due": "Friday",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 31,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Send security questionnaire",
+          "owner": "Vendor",
+          "due": "Today",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 32,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Bring Marco from legal to next call",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 33,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Pilot with 10 agents next month",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 34,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Confirm EU region launch date",
+          "owner": "Vendor",
+          "due": "Friday",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 35,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Send security questionnaire",
+          "owner": "Vendor",
+          "due": "Today",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 36,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Bring Marco from legal to next call",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 37,
+          "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+          "text": "Pilot with 10 agents next month",
+          "owner": "Dana",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        }
+      ],
+      "chunks": {
+        "total": 4,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "asks": [
+      {
+        "q": "What is Dana's hard requirement for data?",
+        "keywords": [
+          "european",
+          "eu"
+        ],
+        "answer": "All data must stay in the European Union. [1][5]",
+        "sources": [
+          {
+            "n": 1,
+            "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+            "meeting_title": "Discussion on Meeting Notes Tool for Support Team",
+            "start_ms": 37000,
+            "text": "That is a hard requirement from our legal team."
+          },
+          {
+            "n": 5,
+            "meeting_id": "d4045ade-8a46-4d72-9648-e029a3a4ca63",
+            "meeting_title": "Discussion on Meeting Notes Tool for Support Team",
+            "start_ms": 33040,
+            "text": "And all of our data must stay in the European Union."
+          }
+        ],
+        "ms": 1918.0011999999988
+      }
+    ],
+    "calls": [
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 3018,
+        "caseId": "customer-discovery"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 2475,
+        "caseId": "customer-discovery"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 2455,
+        "caseId": "customer-discovery"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 1221,
+        "caseId": "customer-discovery"
+      },
+      {
+        "task": "notes",
+        "model": "poolside/laguna-s-2.1:free",
+        "ms": 13217,
+        "caseId": "customer-discovery"
+      },
+      {
+        "task": "notes",
+        "model": "nvidia/nemotron-3-super-120b-a12b:free",
+        "ms": 29796,
+        "caseId": "customer-discovery"
+      },
+      {
+        "task": "answer",
+        "model": "nex-agi/nex-n2.5-mini:free",
+        "ms": 1916,
+        "caseId": "customer-discovery"
+      }
+    ],
+    "checks": [
+      {
+        "label": "Notes generated",
+        "pass": true
+      },
+      {
+        "label": "Transcript word error rate ≤ 20%",
+        "pass": true,
+        "detail": "3.0%"
+      },
+      {
+        "label": "Action item for Sam about \"friday\"",
+        "pass": false,
+        "detail": "not found"
+      },
+      {
+        "label": "Action item for Sam about \"security\"",
+        "pass": false,
+        "detail": "not found"
+      },
+      {
+        "label": "Action item for Dana about \"marco\"",
+        "pass": true,
+        "detail": "\"Bring Marco from legal team to the next call\""
+      },
+      {
+        "label": "Owners are people from the meeting",
+        "pass": false,
+        "detail": "Vendor, Vendor, Vendor, Vendor, Vendor, Vendor, Vendor, Vendor, Vendor, Vendor, Vendor, Vendor, Vendor, Vendor, Vendor, Vendor"
+      },
+      {
+        "label": "Ask: \"What is Dana's hard requirement for data?\"",
+        "pass": true,
+        "detail": "answer mentions european; cites this meeting"
+      }
+    ]
+  },
+  {
+    "id": "incident-postmortem",
+    "title": "Incident postmortem",
+    "durationSec": 77.16,
+    "chunkCount": 4,
+    "skippedSilentChunks": 0,
+    "wer": 0.06951871657754011,
+    "totalMs": 48172.51000000001,
+    "afterStopMs": 47046.05140000001,
+    "meeting": {
+      "id": "18feff5f-75c4-4cbd-8cec-e9ea7f7dd7de",
+      "title": "postmortem.json",
+      "title_locked": false,
+      "status": "ready",
+      "created_at": 1790232790707,
+      "duration_ms": 77160,
+      "summary": "Tuesday's outage caused transcription service downtime for 47 minutes due to an expired API key; lack of alerting delayed detection until customers reported; about 300 meetings lost transcripts, which were reprocessed by 5 PM with no data loss.",
+      "decisions": [
+        "Retries need a circuit breaker to prevent a dead provider from flooding the queue."
+      ],
+      "error": null,
+      "audio_mime": null,
+      "has_audio": false,
+      "segments": [
+        {
+          "id": 35,
+          "start_ms": 0,
+          "end_ms": 3840,
+          "text": "This is the postmortem for Tuesday's outage."
+        },
+        {
+          "id": 36,
+          "start_ms": 3840,
+          "end_ms": 11500,
+          "text": "Transcription was down for 47 minutes, from 210 to 257 in the afternoon."
+        },
+        {
+          "id": 37,
+          "start_ms": 11500,
+          "end_ms": 16240,
+          "text": "The root cause was an expired API key for our speech provider."
+        },
+        {
+          "id": 38,
+          "start_ms": 16240,
+          "end_ms": 20640,
+          "text": "Requests started failing and our retries made the queue back up."
+        },
+        {
+          "id": 39,
+          "start_ms": 20000,
+          "end_ms": 27000,
+          "text": "We had no alert on the error rate from the provider, so we only found out when customers wrote in."
+        },
+        {
+          "id": 40,
+          "start_ms": 27000,
+          "end_ms": 30000,
+          "text": "How many customers were affected?"
+        },
+        {
+          "id": 41,
+          "start_ms": 30000,
+          "end_ms": 34000,
+          "text": "About 300 meetings had no transcript."
+        },
+        {
+          "id": 42,
+          "start_ms": 34000,
+          "end_ms": 40000,
+          "text": "We reprocessed all of them by 5 o'clock, so no data was lost."
+        },
+        {
+          "id": 43,
+          "start_ms": 40000,
+          "end_ms": 46000,
+          "text": "I will add an alert that fires when provider errors go above 5% for two minutes."
+        },
+        {
+          "id": 44,
+          "start_ms": 46000,
+          "end_ms": 48000,
+          "text": "I can ship that by Friday."
+        },
+        {
+          "id": 45,
+          "start_ms": 48000,
+          "end_ms": 56000,
+          "text": "I will move the API keys into the secret manager with expiry reminders, by the end of next week."
+        },
+        {
+          "id": 46,
+          "start_ms": 56000,
+          "end_ms": 61000,
+          "text": "And I will write the customer update and post it on the status page."
+        },
+        {
+          "id": 47,
+          "start_ms": 60000,
+          "end_ms": 62000,
+          "text": "page today."
+        },
+        {
+          "id": 48,
+          "start_ms": 62000,
+          "end_ms": 68240,
+          "text": "We agreed that retries need a circuit breaker, so a dead provider does not flood the queue."
+        },
+        {
+          "id": 49,
+          "start_ms": 68240,
+          "end_ms": 71500,
+          "text": "Jordan, can you scope that?"
+        },
+        {
+          "id": 50,
+          "start_ms": 71500,
+          "end_ms": 76000,
+          "text": "Yes, I will write a short design doc for the circuit breaker next week."
+        }
+      ],
+      "action_items": [
+        {
+          "id": 38,
+          "meeting_id": "18feff5f-75c4-4cbd-8cec-e9ea7f7dd7de",
+          "text": "Add alert that fires when provider errors go above 5% for two minutes.",
+          "owner": "Speaker",
+          "due": "Friday",
+          "done": 0,
+          "start_ms": 40000
+        },
+        {
+          "id": 39,
+          "meeting_id": "18feff5f-75c4-4cbd-8cec-e9ea7f7dd7de",
+          "text": "Move API keys into the secret manager with expiry reminders.",
+          "owner": "Speaker",
+          "due": "End of next week",
+          "done": 0,
+          "start_ms": 48000
+        },
+        {
+          "id": 40,
+          "meeting_id": "18feff5f-75c4-4cbd-8cec-e9ea7f7dd7de",
+          "text": "Write the customer update and post it on the status page.",
+          "owner": "Speaker",
+          "due": "Today",
+          "done": 0,
+          "start_ms": 56000
+        },
+        {
+          "id": 41,
+          "meeting_id": "18feff5f-75c4-4cbd-8cec-e9ea7f7dd7de",
+          "text": "Write a short design doc for the circuit breaker.",
+          "owner": "Jordan",
+          "due": "Next week",
+          "done": 0,
+          "start_ms": 71000
+        }
+      ],
+      "chunks": {
+        "total": 4,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "asks": [
+      {
+        "q": "What caused Tuesday's transcription outage?",
+        "keywords": [
+          "expired",
+          "key"
+        ],
+        "answer": "Tuesday’s transcription outage was caused by an expired API key for the speech provider. [1][3]",
+        "sources": [
+          {
+            "n": 1,
+            "meeting_id": "18feff5f-75c4-4cbd-8cec-e9ea7f7dd7de",
+            "meeting_title": "postmortem.json",
+            "start_ms": 0,
+            "text": "This is the postmortem for Tuesday's outage."
+          },
+          {
+            "n": 3,
+            "meeting_id": "18feff5f-75c4-4cbd-8cec-e9ea7f7dd7de",
+            "meeting_title": "postmortem.json",
+            "start_ms": 11500,
+            "text": "The root cause was an expired API key for our speech provider."
+          }
+        ],
+        "ms": 3070.5469999999914
+      },
+      {
+        "q": "How long was transcription down?",
+        "keywords": [
+          "forty",
+          "47"
+        ],
+        "answer": "Transcription was down for 47 minutes. [1]",
+        "sources": [
+          {
+            "n": 1,
+            "meeting_id": "18feff5f-75c4-4cbd-8cec-e9ea7f7dd7de",
+            "meeting_title": "postmortem.json",
+            "start_ms": 3840,
+            "text": "Transcription was down for 47 minutes, from 210 to 257 in the afternoon."
+          }
+        ],
+        "ms": 1220.4674999999988
+      }
+    ],
+    "calls": [
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 2218,
+        "caseId": "incident-postmortem"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 2200,
+        "caseId": "incident-postmortem"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 2396,
+        "caseId": "incident-postmortem"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 1974,
+        "caseId": "incident-postmortem"
+      },
+      {
+        "task": "notes",
+        "model": "nvidia/nemotron-3-super-120b-a12b:free",
+        "ms": 38984,
+        "caseId": "incident-postmortem"
+      },
+      {
+        "task": "answer",
+        "model": "nex-agi/nex-n2.5-mini:free",
+        "ms": 3069,
+        "caseId": "incident-postmortem"
+      },
+      {
+        "task": "answer",
+        "model": "nex-agi/nex-n2.5-mini:free",
+        "ms": 1218,
+        "caseId": "incident-postmortem"
+      }
+    ],
+    "checks": [
+      {
+        "label": "Notes generated",
+        "pass": true
+      },
+      {
+        "label": "Transcript word error rate ≤ 20%",
+        "pass": true,
+        "detail": "7.0%"
+      },
+      {
+        "label": "Action item for Jordan about \"alert\"",
+        "pass": false,
+        "detail": "not found"
+      },
+      {
+        "label": "Action item for Alex about \"secret\"",
+        "pass": false,
+        "detail": "not found"
+      },
+      {
+        "label": "Action item for Maya about \"status\"",
+        "pass": false,
+        "detail": "not found"
+      },
+      {
+        "label": "Action item for Jordan about \"circuit\"",
+        "pass": true,
+        "detail": "\"Write a short design doc for the circuit breaker.\""
+      },
+      {
+        "label": "Decision about \"circuit breaker\"",
+        "pass": true,
+        "detail": "\"Retries need a circuit breaker to prevent a dead provider from flooding the queue.\""
+      },
+      {
+        "label": "Owners are people from the meeting",
+        "pass": false,
+        "detail": "Speaker, Speaker, Speaker"
+      },
+      {
+        "label": "Ask: \"What caused Tuesday's transcription outage?\"",
+        "pass": true,
+        "detail": "answer mentions expired; cites this meeting"
+      },
+      {
+        "label": "Ask: \"How long was transcription down?\"",
+        "pass": true,
+        "detail": "answer mentions 47; cites this meeting"
+      }
+    ]
+  },
+  {
+    "id": "hiring-debrief",
+    "title": "Hiring debrief (no decision)",
+    "durationSec": 45.115,
+    "chunkCount": 3,
+    "skippedSilentChunks": 0,
+    "wer": 0.034482758620689655,
+    "totalMs": 27734.12909999999,
+    "afterStopMs": 26782.7917,
+    "meeting": {
+      "id": "1e696225-c0c3-4945-a6df-fde970519e82",
+      "title": "Front-end Candidate Debrief",
+      "title_locked": false,
+      "status": "ready",
+      "created_at": 1790232838884,
+      "duration_ms": 45115,
+      "summary": "The team discussed the front-end candidate interviewed yesterday, highlighting strong React and performance skills, good product sense, and sharp questions about onboarding, but noted a shallow system design answer and limited testing in the take-home project. They lean toward hiring but want to wait for Sam's culture interview notes before deciding, and agreed to reconvene on Monday after receiving those notes.",
+      "decisions": [
+        "No hiring decision made today."
+      ],
+      "error": null,
+      "audio_mime": null,
+      "has_audio": false,
+      "segments": [
+        {
+          "id": 51,
+          "start_ms": 0,
+          "end_ms": 4040,
+          "text": "Let's debrief on the front end candidate we interviewed yesterday."
+        },
+        {
+          "id": 52,
+          "start_ms": 4040,
+          "end_ms": 6820,
+          "text": "Strong on react and performance."
+        },
+        {
+          "id": 53,
+          "start_ms": 6820,
+          "end_ms": 10440,
+          "text": "The system design answer was a bit shallow though."
+        },
+        {
+          "id": 54,
+          "start_ms": 10440,
+          "end_ms": 12320,
+          "text": "I agree on the design part."
+        },
+        {
+          "id": 55,
+          "start_ms": 12320,
+          "end_ms": 14280,
+          "text": "Her product sense was great."
+        },
+        {
+          "id": 56,
+          "start_ms": 14280,
+          "end_ms": 17160,
+          "text": "She asked sharp questions about our onboarding."
+        },
+        {
+          "id": 57,
+          "start_ms": 17160,
+          "end_ms": 19280,
+          "text": "I am not sure yet."
+        },
+        {
+          "id": 58,
+          "start_ms": 19280,
+          "end_ms": 20000,
+          "text": "The take home product."
+        },
+        {
+          "id": 59,
+          "start_ms": 20000,
+          "end_ms": 24480,
+          "text": "The project was clean, but I did not see much testing."
+        },
+        {
+          "id": 60,
+          "start_ms": 24480,
+          "end_ms": 26120,
+          "text": "That is fair."
+        },
+        {
+          "id": 61,
+          "start_ms": 26120,
+          "end_ms": 31120,
+          "text": "Maybe we ask about testing in a follow-up call instead of rejecting her."
+        },
+        {
+          "id": 62,
+          "start_ms": 31120,
+          "end_ms": 35500,
+          "text": "I would lean yes, but I do not want to decide without hearing from Sam, who ran the Culture"
+        },
+        {
+          "id": 63,
+          "start_ms": 35500,
+          "end_ms": 37000,
+          "text": "interview."
+        },
+        {
+          "id": 64,
+          "start_ms": 37000,
+          "end_ms": 38320,
+          "text": "Okay."
+        },
+        {
+          "id": 65,
+          "start_ms": 38320,
+          "end_ms": 39360,
+          "text": "No decision today."
+        },
+        {
+          "id": 66,
+          "start_ms": 40000,
+          "end_ms": 44000,
+          "text": "I will ask Sam to send his notes, and we will meet again on Monday."
+        }
+      ],
+      "action_items": [
+        {
+          "id": 42,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Ask Sam to send his notes from the Culture interview.",
+          "owner": "Unspecified (likely the speaker who will ask Sam)",
+          "due": "Before Monday meeting",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 43,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Schedule a follow-up meeting for Monday to reconvene after Sam's notes are received.",
+          "owner": "Unspecified",
+          "due": "Monday",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 44,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Consider arranging a follow-up call with the candidate to discuss testing experience.",
+          "owner": "Unspecified",
+          "due": "TBD",
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 45,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 46,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 47,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 48,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 49,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 50,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 51,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 52,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 53,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 54,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 55,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 56,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 57,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 58,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 59,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 60,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 61,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 62,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 63,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 64,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 65,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 66,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 67,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 68,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 69,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 70,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 71,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 72,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "Will ask Sam to send his notes, and we will meet again on Monday.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 73,
+          "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+          "text": "No decision today.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        }
+      ],
+      "chunks": {
+        "total": 3,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "asks": [
+      {
+        "q": "What concerns came up about the frontend candidate?",
+        "keywords": [
+          "design",
+          "testing"
+        ],
+        "answer": "The only stated concern was her testing approach: they suggested asking about testing in a follow-up call rather than rejecting her [1][3].",
+        "sources": [
+          {
+            "n": 1,
+            "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+            "meeting_title": "Front-end Candidate Debrief",
+            "start_ms": 0,
+            "text": "Let's debrief on the front end candidate we interviewed yesterday."
+          },
+          {
+            "n": 3,
+            "meeting_id": "1e696225-c0c3-4945-a6df-fde970519e82",
+            "meeting_title": "Front-end Candidate Debrief",
+            "start_ms": 26120,
+            "text": "Maybe we ask about testing in a follow-up call instead of rejecting her."
+          }
+        ],
+        "ms": 2216.0552000000025
+      }
+    ],
+    "calls": [
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 2694,
+        "caseId": "hiring-debrief"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 2552,
+        "caseId": "hiring-debrief"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 1090,
+        "caseId": "hiring-debrief"
+      },
+      {
+        "task": "notes",
+        "model": "nvidia/nemotron-3-super-120b-a12b:free",
+        "ms": 20693,
+        "caseId": "hiring-debrief"
+      },
+      {
+        "task": "answer",
+        "model": "nex-agi/nex-n2.5-mini:free",
+        "ms": 2214,
+        "caseId": "hiring-debrief"
+      }
+    ],
+    "checks": [
+      {
+        "label": "Notes generated",
+        "pass": true
+      },
+      {
+        "label": "Transcript word error rate ≤ 20%",
+        "pass": true,
+        "detail": "3.4%"
+      },
+      {
+        "label": "Action item for Maya about \"sam\"",
+        "pass": false,
+        "detail": "not found"
+      },
+      {
+        "label": "No invented hire/reject decision",
+        "pass": true,
+        "detail": "1 decision(s) recorded"
+      },
+      {
+        "label": "Owners are people from the meeting",
+        "pass": false,
+        "detail": "Unspecified, Unspecified"
+      },
+      {
+        "label": "Ask: \"What concerns came up about the frontend candidate?\"",
+        "pass": true,
+        "detail": "answer mentions testing; cites this meeting"
+      }
+    ]
+  },
+  {
+    "id": "late-start-standup",
+    "title": "Late start: 25 s of silence, then a standup",
+    "durationSec": 46.0426875,
+    "chunkCount": 3,
+    "skippedSilentChunks": 1,
+    "wer": 0.08333333333333333,
+    "totalMs": 7986.469600000011,
+    "afterStopMs": 7283.455500000011,
+    "meeting": {
+      "id": "e4e37d4b-5cc3-4ee5-8e39-419affd9a55e",
+      "title": "Zendesk Integration Update",
+      "title_locked": false,
+      "status": "ready",
+      "created_at": 1790232866621,
+      "duration_ms": 46043,
+      "summary": "The Zendesk integration prototype was finished yesterday. The speaker is testing it with real tickets today but is blocked by the staging database migration.",
+      "decisions": [],
+      "error": null,
+      "audio_mime": null,
+      "has_audio": false,
+      "segments": [
+        {
+          "id": 67,
+          "start_ms": 20000,
+          "end_ms": 27280,
+          "text": "Sorry, I was unmute."
+        },
+        {
+          "id": 68,
+          "start_ms": 27280,
+          "end_ms": 29160,
+          "text": "Quick update from me."
+        },
+        {
+          "id": 69,
+          "start_ms": 29160,
+          "end_ms": 32240,
+          "text": "Yesterday I finished the Zendesk integration prototype."
+        },
+        {
+          "id": 70,
+          "start_ms": 32240,
+          "end_ms": 35080,
+          "text": "Today I am testing it with real tickets."
+        },
+        {
+          "id": 71,
+          "start_ms": 35080,
+          "end_ms": 38920,
+          "text": "I am blocked on the staging database migration."
+        },
+        {
+          "id": 72,
+          "start_ms": 38920,
+          "end_ms": 40040,
+          "text": "I need Jordan to remove it."
+        },
+        {
+          "id": 73,
+          "start_ms": 40000,
+          "end_ms": 43000,
+          "text": "Review the migration script."
+        },
+        {
+          "id": 74,
+          "start_ms": 43000,
+          "end_ms": 45000,
+          "text": "I will review it right after this call."
+        }
+      ],
+      "action_items": [
+        {
+          "id": 74,
+          "meeting_id": "e4e37d4b-5cc3-4ee5-8e39-419affd9a55e",
+          "text": "Remove the staging database migration.",
+          "owner": "Jordan",
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        },
+        {
+          "id": 75,
+          "meeting_id": "e4e37d4b-5cc3-4ee5-8e39-419affd9a55e",
+          "text": "Review the migration script right after this call.",
+          "owner": null,
+          "due": null,
+          "done": 0,
+          "start_ms": null
+        }
+      ],
+      "chunks": {
+        "total": 3,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "asks": [
+      {
+        "q": "Who is blocked in the standup, and on what?",
+        "keywords": [
+          "migration"
+        ],
+        "answer": "The speaker's name isn't provided in the excerpt, but they are blocked on the staging database migration [1].",
+        "sources": [
+          {
+            "n": 1,
+            "meeting_id": "e4e37d4b-5cc3-4ee5-8e39-419affd9a55e",
+            "meeting_title": "Zendesk Integration Update",
+            "start_ms": 35080,
+            "text": "I am blocked on the staging database migration."
+          }
+        ],
+        "ms": 14433.546399999992
+      }
+    ],
+    "calls": [
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 2171,
+        "caseId": "late-start-standup"
+      },
+      {
+        "task": "transcribe",
+        "model": "local:onnx-community/whisper-base.en",
+        "ms": 1131,
+        "caseId": "late-start-standup"
+      },
+      {
+        "task": "notes",
+        "model": "nex-agi/nex-n2.5-mini:free",
+        "ms": 4552,
+        "caseId": "late-start-standup"
+      },
+      {
+        "task": "answer",
+        "model": "inclusionai/ling-3.0-flash-sante:free",
+        "ms": 14432,
+        "caseId": "late-start-standup"
+      }
+    ],
+    "checks": [
+      {
+        "label": "Notes generated",
+        "pass": true
+      },
+      {
+        "label": "Transcript word error rate ≤ 20%",
+        "pass": true,
+        "detail": "8.3%"
+      },
+      {
+        "label": "Action item for Jordan about \"review\"",
+        "pass": false,
+        "detail": "not found"
+      },
+      {
+        "label": "Owners are people from the meeting",
+        "pass": true
+      },
+      {
+        "label": "Transcript starts after the 25 s of silence",
+        "pass": true,
+        "detail": "first line at 0:20"
+      },
+      {
+        "label": "Silent chunk skipped without an API call",
+        "pass": true,
+        "detail": "1 chunk(s) skipped"
+      },
+      {
+        "label": "Ask: \"Who is blocked in the standup, and on what?\"",
+        "pass": true,
+        "detail": "answer mentions migration; cites this meeting"
+      }
+    ]
+  }
+]

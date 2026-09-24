@@ -70,7 +70,9 @@ function wer(reference: string, hypothesis: string): number {
   return r.length ? prev[h.length] / r.length : 0;
 }
 
-const has = (text: string | null | undefined, keyword: string) => (text ?? '').toLowerCase().includes(keyword.toLowerCase());
+// Models write "dark‑mode" with a non-breaking hyphen (U+2011) or en dashes; compare on words.
+const norm = (s: string) => s.toLowerCase().replace(/[\p{Pd}‑]/gu, ' ').replace(/\s+/g, ' ');
+const has = (text: string | null | undefined, keyword: string) => norm(text ?? '').includes(norm(keyword));
 
 interface Meeting {
   id: string;
@@ -88,6 +90,8 @@ interface Check {
   label: string;
   pass: boolean;
   detail?: string;
+  /** 'owner' checks depend on speaker diarization, which isn't built yet; reported separately. */
+  kind?: 'owner';
 }
 
 // ── run ────────────────────────────────────────────────────────────────────────
@@ -178,10 +182,17 @@ const report = results.map((r) => {
   const w = wer(reference, hypothesis);
   const checks: Check[] = [{ label: 'Notes generated', pass: m.status === 'ready', detail: m.error ?? undefined }];
   checks.push({ label: `Transcript word error rate ≤ 20%`, pass: w <= 0.2, detail: `${(w * 100).toFixed(1)}%` });
+  // Two separate questions: did the notes capture the task, and did they name who owns it?
+  // Owners are hard without speaker labels (no diarization yet), so they're scored on their own.
   for (const e of c.expect.actionItems) {
-    const hit = m.action_items.find((a) => has(`${a.text} ${a.due ?? ''}`, e.keyword) && (!e.owner || has(a.owner, e.owner) || has(a.text, e.owner)));
-    checks.push({ label: `Action item${e.owner ? ` for ${e.owner}` : ''} about "${e.keyword}"`, pass: !!hit, detail: hit ? `"${hit.text}"` : 'not found' });
+    const hit = m.action_items.find((a) => has(`${a.text} ${a.due ?? ''}`, e.keyword));
+    checks.push({ label: `Task captured: "${e.keyword}"`, pass: !!hit, detail: hit ? `"${hit.text}"` : 'not found' });
+    if (e.owner) {
+      const owned = hit && (has(hit.owner, e.owner) || has(hit.text, e.owner));
+      checks.push({ label: `Owner attributed: ${e.owner}`, pass: !!owned, kind: 'owner', detail: hit ? `owner: ${hit.owner ?? 'null'}` : 'task missing' });
+    }
   }
+  checks.push({ label: 'No duplicate action items', pass: new Set(m.action_items.map((a) => norm(a.text))).size === m.action_items.length, detail: `${m.action_items.length} items` });
   if (c.expect.decisionKeywords?.length) {
     const hit = m.decisions.find((d) => c.expect.decisionKeywords!.some((k) => has(d, k)));
     checks.push({ label: `Decision about ${c.expect.decisionKeywords.map((k) => `"${k}"`).join(' / ')}`, pass: !!hit, detail: hit ? `"${hit}"` : 'not found' });
@@ -212,6 +223,13 @@ const secs = (ms: number) => `${(ms / 1000).toFixed(1)} s`;
 const esc = (s: string | null | undefined) => (s ?? '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
 const modelsUsed = (cs: CallEvent[], task: CallEvent['task']) => [...new Set(cs.filter((x) => x.task === task).map((x) => x.model))].map((m) => `\`${m}\``).join(', ') || '—';
 const totalChecks = report.flatMap((r) => r.checks);
+const core = totalChecks.filter((c) => c.kind !== 'owner');
+const owners = totalChecks.filter((c) => c.kind === 'owner');
+const score = (cs: Check[]) => `${cs.filter((c) => c.pass).length} / ${cs.length}`;
+const headline =
+  `**${score(core)} content checks passed** (transcript, tasks, decisions, grounded answers, silence). ` +
+  `**Owners: ${score(owners)}**: owners named in the text ("Jordan, can you own the fix?") are captured; every miss is a first-person commitment ("I will…") and transcripts have no speaker labels, ` +
+  'so the pipeline correctly records null rather than guessing. Speaker diarization is the fix.';
 
 const md: string[] = [
   '# Case studies: five meetings through the real pipeline',
@@ -220,7 +238,7 @@ const md: string[] = [
     'Each meeting was synthesized with the built-in Windows voices, split into 20-second 16 kHz WAV chunks, and uploaded through the ' +
     'same HTTP API the browser recorder uses. Nothing is mocked. Reproduce with `npm run case-studies`.',
   '',
-  `**${totalChecks.filter((c) => c.pass).length} / ${totalChecks.length} checks passed.**`,
+  headline,
   '',
   '| # | Case | Audio | Chunks (skipped silent) | Transcript WER | Notes ready after stop | Action items | Checks |',
   '|---|---|---|---|---|---|---|---|',

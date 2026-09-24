@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { parseJsonLoose, splitTimed, type Extraction } from '../src/ai.ts';
+import { cleanExtraction, parseJsonLoose, splitTimed, type Extraction } from '../src/ai.ts';
 import { createAi } from '../src/providers/index.ts';
+import { localStt } from '../src/providers/local.ts';
 import { cleanTranscript, openRouterLlm, openRouterStt, type OpenRouterClient } from '../src/providers/openrouter.ts';
 import { encodeWav, isSilentWav, rmsDbfs, sliceWav, wavInfo } from '../src/wav.ts';
 
@@ -52,6 +53,40 @@ test('wav: parse, loudness, silence gate, slicing', () => {
   const parts = sliceWav(tone(45, 0.3), 20);
   assert.deepEqual(parts.map((p) => p.startSec), [0, 20, 40]);
   assert.deepEqual(parts.map((p) => wavInfo(p.wav)!.durationSec), [20, 20, 5]);
+});
+
+test('cleanExtraction fixes what free models actually returned in case-study run 1', () => {
+  const repeated = [
+    { text: 'Confirm EU region launch date', owner: 'Vendor', due: 'Friday', timestamp: null },
+    { text: 'Bring Marco from legal to next call', owner: 'Dana', due: null, timestamp: '1:02' },
+  ];
+  const x = cleanExtraction({
+    title: 'postmortem.json',
+    summary: ' Summary. ',
+    decisions: ['Push dark mode.', 'push dark-mode', 'Circuit breaker'],
+    action_items: [
+      ...Array.from({ length: 8 }, () => repeated).flat(), // the model looped 8 times
+      { text: 'Ask Sam to send his notes', owner: 'Unspecified (likely the speaker who will ask Sam)', due: 'TBD', timestamp: null },
+      { text: 'Hand off specs', owner: '', due: 'tomorrow', timestamp: null },
+      { text: 'Add an alert', owner: 'Speaker', due: '', timestamp: null },
+      { text: 'Fix the sync bug', owner: 'Jordan', due: 'Wednesday', timestamp: '0:14' },
+    ],
+  });
+  assert.equal(x.title, 'postmortem');
+  assert.equal(x.summary, 'Summary.');
+  assert.deepEqual(x.decisions, ['Push dark mode.', 'Circuit breaker']);
+  assert.deepEqual(
+    x.action_items.map((a) => [a.text, a.owner, a.due]),
+    [
+      ['Confirm EU region launch date', null, 'Friday'],
+      ['Bring Marco from legal to next call', 'Dana', null],
+      ['Ask Sam to send his notes', null, null],
+      ['Hand off specs', null, 'tomorrow'],
+      ['Add an alert', null, null],
+      ['Fix the sync bug', 'Jordan', 'Wednesday'],
+    ],
+  );
+  assert.equal(cleanExtraction({ ...x, title: '  ' }).title, 'Untitled meeting');
 });
 
 test('text helpers: loose JSON, transcript cleanup, proportional timing', () => {
@@ -118,8 +153,32 @@ test('OpenRouter transcription: WAV as input_audio, silence token, timing, non-W
   await assert.rejects(stt.transcribe(Buffer.from('webm bytes'), 'audio/webm'), /needs WAV/);
 });
 
+test('OpenRouter errors: concise message, and only transient ones are retryable', async () => {
+  const failing = (statusCode: number) =>
+    ({
+      chat: {
+        async send() {
+          throw Object.assign(new Error('API error occurred: {...huge dump...}'), { statusCode, body: JSON.stringify({ error: { message: 'This request requires at least $0.50 in balance for audio' } }) });
+        },
+      },
+    }) as unknown as OpenRouterClient;
+  const err = await openRouterStt(failing(402), {}).transcribe(tone(2, 0.3), 'audio/wav').catch((e) => e);
+  assert.equal(err.message, 'OpenRouter 402: This request requires at least $0.50 in balance for audio');
+  assert.equal(err.retryable, false);
+  assert.equal((await openRouterLlm(failing(429), {}).answer('q', []).catch((e) => e)).retryable, true);
+  assert.equal((await openRouterLlm(failing(503), {}).answer('q', []).catch((e) => e)).retryable, true);
+});
+
+test('local Whisper validates input before loading the model', async () => {
+  const stt = localStt({});
+  assert.throws(() => stt.transcribe(Buffer.from('webm'), 'audio/webm'), /needs 16-bit PCM WAV/);
+  const wav44k = encodeWav(Buffer.alloc(44_100 * 2), 44_100);
+  assert.throws(() => stt.transcribe(wav44k, 'audio/wav'), /needs 16 kHz/);
+});
+
 test('provider selection and the silence gate', async () => {
-  assert.match(createAi({ OPENROUTER_API_KEY: 'k' }).description, /notes\/ask: openrouter, transcription: openrouter/);
+  assert.match(createAi({ OPENROUTER_API_KEY: 'k' }).description, /notes\/ask: openrouter, transcription: local/);
+  assert.match(createAi({ OPENROUTER_API_KEY: 'k', STT_PROVIDER: 'openrouter' }).description, /transcription: openrouter/);
   assert.match(createAi({ ANTHROPIC_API_KEY: 'k' }).description, /notes\/ask: anthropic/);
   assert.match(createAi({ OPENROUTER_API_KEY: 'k', GROQ: '', STT_API_KEY: 'g' }).description, /transcription: whisper/);
   assert.match(createAi({ AI_PROVIDER: 'mock' }).description, /mock, transcription: mock/);

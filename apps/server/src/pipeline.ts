@@ -1,6 +1,6 @@
 import { readFile, rm } from 'node:fs/promises';
 import path from 'node:path';
-import { formatTs, parseTs, type Ai } from './ai.ts';
+import { cleanExtraction, formatTs, parseTs, type Ai } from './ai.ts';
 import type { Db, Meeting } from './db.ts';
 
 export interface PipelineDeps {
@@ -56,6 +56,7 @@ export function createPipeline({ db, ai, audioDir, retryDelaysMs = [1000, 4000],
         break;
       } catch (e) {
         lastError = e;
+        if ((e as { retryable?: boolean }).retryable === false) break; // e.g. bad key, no credit
         if (attempt < retryDelaysMs.length) await sleep(retryDelaysMs[attempt]);
       }
     }
@@ -81,7 +82,7 @@ export function createPipeline({ db, ai, audioDir, retryDelaysMs = [1000, 4000],
         return;
       }
       const transcript = segs.map((s) => `[${formatTs(s.start_ms)}] ${s.text}`).join('\n');
-      const x = await ai.extract(transcript);
+      const x = cleanExtraction(await ai.extract(transcript));
       db.transaction(() => {
         // ponytail: re-extraction replaces items (and their done flags); merge by text if users complain.
         db.prepare('DELETE FROM action_items WHERE meeting_id = ?').run(meetingId);

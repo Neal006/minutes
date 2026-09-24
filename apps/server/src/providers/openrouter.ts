@@ -45,7 +45,19 @@ export type OnCall = (e: CallEvent) => void;
 type SendRequest = Parameters<OpenRouterClient['chat']['send']>[0];
 async function send(client: OpenRouterClient, task: CallEvent['task'], request: SendRequest, onCall?: OnCall) {
   const t0 = performance.now();
-  const res = await client.chat.send(request, REQUEST_OPTIONS);
+  let res: SendResult;
+  try {
+    res = await client.chat.send(request, REQUEST_OPTIONS);
+  } catch (e) {
+    const status = (e as { statusCode?: number }).statusCode;
+    if (!status) throw e;
+    let message = e instanceof Error ? e.message : String(e);
+    try {
+      message = JSON.parse((e as { body?: string }).body ?? '').error?.message ?? message;
+    } catch {}
+    // 401/402/403… won't fix themselves: tell the pipeline not to burn quota retrying.
+    throw Object.assign(new Error(`OpenRouter ${status}: ${message}`), { retryable: status === 408 || status === 429 || status >= 500 });
+  }
   onCall?.({ task, model: 'model' in res ? res.model : 'unknown', ms: Math.round(performance.now() - t0) });
   return res;
 }

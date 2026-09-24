@@ -213,6 +213,24 @@ test('silent meeting skips the LLM; a chunk that keeps failing does not block no
   assert.equal(existsSync(chunkPath(audioDir, partial, 1)), true);
 });
 
+test('non-retryable STT errors (bad key, no credit) are not retried', async () => {
+  let calls = 0;
+  const { call, newMeeting, putChunk, waitStatus } = await start(
+    fakeAi({
+      async transcribe() {
+        calls++;
+        throw Object.assign(new Error('OpenRouter 402: needs balance'), { retryable: false });
+      },
+    }),
+  );
+  const id = await newMeeting();
+  await putChunk(id, 0, 0, 'words');
+  await call('POST', `/meetings/${id}/finish`, {});
+  const m = await waitStatus(id, 'ready');
+  assert.equal(calls, 1);
+  assert.deepEqual(m.chunks, { total: 1, pending: 0, failed: 1 });
+});
+
 test('input validation at the API boundary', async () => {
   const { call, newMeeting, putChunk } = await start(fakeAi());
   const id = await newMeeting();
