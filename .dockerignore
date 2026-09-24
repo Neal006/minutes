@@ -1,0 +1,15 @@
+**/node_modules
+**/dist
+.git
+.claude
+.github
+data
+tools
+e2e
+docs
+deploy
+apps/desktop/*.cjs
+apps/server/case-studies
+apps/server/test
+*.md
+.env

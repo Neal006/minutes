@@ -1,0 +1,11 @@
+{
+  "name": "@minutes/desktop",
+  "private": true,
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^44.4.5"
+  }
+}

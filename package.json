@@ -1,0 +1,26 @@
+{
+  "name": "minutes",
+  "private": true,
+  "workspaces": [
+    "apps/server",
+    "apps/web",
+    "apps/desktop"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,web -c blue,green \"npm run dev -w apps/server\" \"npm run dev -w apps/web\"",
+    "build": "npm run build -w apps/web",
+    "start": "npm run start -w apps/server",
+    "seed": "npm run seed -w apps/server",
+    "desktop": "npm start -w apps/desktop",
+    "test": "npm test -w apps/server",
+    "e2e": "npm run build && node scripts/get-obscura.mjs && playwright test",
+    "e2e:obscura": "npm run build && node scripts/get-obscura.mjs && playwright test --project=obscura",
+    "models:free": "npm run models:free -w apps/server",
+    "case-studies": "npm run case-studies -w apps/server",
+    "typecheck": "npm run typecheck -w apps/server && npm run typecheck -w apps/web"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "concurrently": "^10.0.5"
+  }
+}

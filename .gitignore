@@ -1,0 +1,10 @@
+node_modules/
+dist/
+data/
+.env
+.claude/
+*.log
+tools/
+e2e/report/
+e2e/.results/
+apps/server/case-studies/audio/

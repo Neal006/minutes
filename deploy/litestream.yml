@@ -1,0 +1,10 @@
+dbs:
+  - path: /data/minutes.db
+    replicas:
+      - type: s3
+        bucket: ${R2_BUCKET}
+        path: litestream/minutes.db
+        endpoint: ${R2_ENDPOINT}
+        region: auto
+        force-path-style: true
+        retention: 168h # a week of point-in-time restore
