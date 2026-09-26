@@ -15,7 +15,20 @@ export const DEFAULT_STT_MODELS = ['thinkingmachines/inkling-small:free', 'think
 export type OpenRouterClient = Pick<OpenRouter, 'chat'>;
 type SendResult = Awaited<ReturnType<OpenRouterClient['chat']['send']>>;
 
-const list = (v: string | undefined, fallback: string[]) => (v ? v.split(',').map((s) => s.trim()).filter(Boolean) : fallback);
+/** `:free` variants and OpenRouter's free-only router cost nothing; every other id is billed per token. */
+export const isFreeModel = (id: string) => id.endsWith(':free') || id === 'openrouter/free';
+
+/** Parse a model list from env, refusing paid models unless OPENROUTER_ALLOW_PAID=1 (a typo shouldn't bill you). */
+function modelList(env: NodeJS.ProcessEnv, key: 'OPENROUTER_MODELS' | 'OPENROUTER_STT_MODELS', fallback: string[]) {
+  const raw = env[key];
+  const models = raw ? raw.split(',').map((s) => s.trim()).filter(Boolean) : [];
+  const chosen = models.length ? models : fallback;
+  const paid = chosen.filter((id) => !isFreeModel(id));
+  if (paid.length && env.OPENROUTER_ALLOW_PAID !== '1') {
+    throw new Error(`${key} includes paid model(s): ${paid.join(', ')}. Use :free ids (npm run models:free) or set OPENROUTER_ALLOW_PAID=1`);
+  }
+  return chosen;
+}
 
 // Free models are rate-limited (HTTP 429); back off and retry instead of failing the meeting.
 const REQUEST_OPTIONS = {
@@ -74,7 +87,7 @@ export function messageText(res: SendResult): string {
 }
 
 export function openRouterLlm(client: OpenRouterClient, env = process.env, onCall?: OnCall): Llm {
-  const models = list(env.OPENROUTER_MODELS, DEFAULT_NOTES_MODELS);
+  const models = modelList(env, 'OPENROUTER_MODELS', DEFAULT_NOTES_MODELS);
   const route = { model: models[0], ...(models.length > 1 ? { models } : {}) };
 
   return {
@@ -144,7 +157,7 @@ If there is no intelligible speech, output exactly ${SILENCE_TOKEN}`;
 
 /** Transcription through an audio-capable chat model (OpenRouter has no /audio/transcriptions endpoint). */
 export function openRouterStt(client: OpenRouterClient, env = process.env, onCall?: OnCall): Stt {
-  const models = list(env.OPENROUTER_STT_MODELS, DEFAULT_STT_MODELS);
+  const models = modelList(env, 'OPENROUTER_STT_MODELS', DEFAULT_STT_MODELS);
   const route = { model: models[0], ...(models.length > 1 ? { models } : {}) };
 
   return {

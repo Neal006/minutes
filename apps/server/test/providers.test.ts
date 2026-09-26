@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { cleanExtraction, parseJsonLoose, splitTimed, type Extraction } from '../src/ai.ts';
 import { createAi } from '../src/providers/index.ts';
 import { localStt } from '../src/providers/local.ts';
-import { cleanTranscript, openRouterLlm, openRouterStt, type OpenRouterClient } from '../src/providers/openrouter.ts';
+import { cleanTranscript, DEFAULT_NOTES_MODELS, DEFAULT_STT_MODELS, isFreeModel, openRouterLlm, openRouterStt, type OpenRouterClient } from '../src/providers/openrouter.ts';
 import { encodeWav, isSilentWav, rmsDbfs, sliceWav, wavInfo } from '../src/wav.ts';
 
 const RATE = 16_000;
@@ -167,6 +167,18 @@ test('OpenRouter errors: concise message, and only transient ones are retryable'
   assert.equal(err.retryable, false);
   assert.equal((await openRouterLlm(failing(429), {}).answer('q', []).catch((e) => e)).retryable, true);
   assert.equal((await openRouterLlm(failing(503), {}).answer('q', []).catch((e) => e)).retryable, true);
+});
+
+test('OpenRouter: only free models unless OPENROUTER_ALLOW_PAID=1', () => {
+  const client = fakeClient([]).client;
+  for (const id of [...DEFAULT_NOTES_MODELS, ...DEFAULT_STT_MODELS]) assert.ok(isFreeModel(id), id);
+  assert.equal(isFreeModel('openai/gpt-5'), false);
+  assert.equal(isFreeModel('openai/gpt-5:free-ish'), false);
+
+  assert.throws(() => openRouterLlm(client, { OPENROUTER_MODELS: 'a/one:free, openai/gpt-5' }), /paid.*openai\/gpt-5.*OPENROUTER_ALLOW_PAID/);
+  assert.throws(() => openRouterStt(client, { OPENROUTER_STT_MODELS: 'google/gemini-3-pro' }), /google\/gemini-3-pro/);
+  assert.doesNotThrow(() => openRouterLlm(client, { OPENROUTER_MODELS: 'openai/gpt-5', OPENROUTER_ALLOW_PAID: '1' }));
+  assert.doesNotThrow(() => openRouterLlm(client, { OPENROUTER_MODELS: 'a/one:free,openrouter/free' }));
 });
 
 test('local Whisper validates input before loading the model', async () => {

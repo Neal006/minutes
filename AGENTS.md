@@ -1,5 +1,5 @@
 # AGENTS.md — Project Memory (auto-maintained)
-Last updated: 2026-09-24 | Sessions logged: 3
+Last updated: 2026-09-26 | Sessions logged: 4
 
 ## Identity
 Minutes: AI meeting notes (record → live transcript → AI notes → search/ask). Portfolio project targeting the Circleback SWE intern role.
@@ -8,7 +8,7 @@ Minutes: AI meeting notes (record → live transcript → AI notes → search/as
 Node 22, npm workspaces, TypeScript 7, Express 5, better-sqlite3 (FTS5), React 19 + Vite 8, Electron 44, @openrouter/sdk, @anthropic-ai/sdk, @huggingface/transformers (local Whisper), zod 4, Playwright + Obscura.
 - install: `npm install` (Electron binary missing? `node node_modules/electron/install.js`; e2e needs `npx playwright install chromium`)
 - dev: `npm run dev` (API :3001 + Vite :5173) · offline: `AI_PROVIDER=mock npm run dev` · seed: `npm run seed`
-- test: `npm test` (16) · e2e: `npm run e2e` (17: Obscura + Chromium) · case studies: `npm run case-studies` (needs OPENROUTER_API_KEY; `-- --audio-only` offline)
+- test: `npm test` (17) · e2e: `npm run e2e` (17: Obscura + Chromium) · case studies: `npm run case-studies` (needs OPENROUTER_API_KEY; `-- --audio-only` offline)
 - free models now: `npm run models:free` · typecheck: `npm run typecheck` · build: `npm run build` · docker: `docker build -t minutes .`
 
 ## Current State & Focus
@@ -25,7 +25,7 @@ createAi(env, hooks) picks providers; tests inject fakes via createApp({ ai }).
 ## File Map
 - apps/server/src/ai.ts — Ai/Stt/Llm types, Extraction schema, prompts, cleanExtraction (placeholders→null, dedupe, cap 25, title ext), parseJsonLoose, splitTimed, formatTs/parseTs, dropSilence
 - apps/server/src/providers/index.ts — createAi(env, {onCall,onSilenceSkipped}); provider defaults; silence gate
-- apps/server/src/providers/openrouter.ts — SDK client, notes (json_schema + repair), answer, STT via input_audio, DEFAULT_*_MODELS, CallEvent
+- apps/server/src/providers/openrouter.ts — SDK client, isFreeModel + modelList (paid ids throw at boot unless OPENROUTER_ALLOW_PAID=1), notes (json_schema + repair), answer, STT via input_audio, DEFAULT_*_MODELS, CallEvent
 - apps/server/src/providers/local.ts — localStt: transformers.js whisper-base.en q8; validates 16-bit/16 kHz WAV before model load; serialized; MODEL_CACHE_DIR
 - apps/server/src/providers/{anthropic,whisper,mock}.ts — Claude, OpenAI-compatible STT, deterministic mock ([[flaky]] fails once)
 - apps/server/src/wav.ts — wavInfo, rmsDbfs, isSilentWav (-50 dBFS), encodeWav, sliceWav
@@ -65,9 +65,11 @@ createAi(env, hooks) picks providers; tests inject fakes via createApp({ ai }).
 - 2026-09-24 — browser converts chunks to 16 kHz WAV — accepted by every STT incl. OpenRouter audio models
 - 2026-09-24 — delete chunk files after transcription — ~8x less disk/backup
 - 2026-09-24 — local Whisper default STT — OpenRouter audio needs paid balance; local is $0 and private
+- 2026-09-26 — reject non-:free OpenRouter ids at boot (opt-in OPENROUTER_ALLOW_PAID=1) — a bad env var must never bill
 - 2026-09-24 — deploy: Oracle A1 + Cloudflare Tunnel/Access + Litestream→R2; Groq Whisper for prod STT — $0, no open ports
 
 ## Changelog
+- 2026-09-26 | enforce free OpenRouter models; verified defaults still free via models:free | providers/openrouter.ts, test/providers.test.ts, .env.example | fail fast at boot, not per request
 - 2026-09-24 | local Whisper default STT, cleanExtraction, scorer split (task vs owner), case-study run 2, README HLD/LLD/stack/case studies | ai.ts, pipeline.ts, providers/local.ts, case-studies/run.ts, test/providers.test.ts, README.md, docs/* | post-process model output; schema validation alone isn't enough
 - 2026-09-24 | OpenRouter providers, WAV pipeline, Obscura e2e, case-study harness, $0 deploy design | apps/server/src/providers/*, wav.ts, e2e/*, apps/server/case-studies/*, Dockerfile, deploy/*, docs/DEPLOYMENT.md | provider abstraction + mock for e2e
 - 2026-09-24 | MVP: server, web, desktop, tests, CI, docs | all | initial build
