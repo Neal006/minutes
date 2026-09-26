@@ -17,4 +17,4 @@ configMapGenerator:
     files: [litestream.yml]
 images:
   - name: ghcr.io/neal006/minutes
-    newTag: latest # CI rewrites this to the commit SHA after each image publish
+    newTag: e3e5c0432d260392ce03cc8eef529eb98df22363 # set by CI
