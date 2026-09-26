@@ -17,4 +17,4 @@ configMapGenerator:
     files: [litestream.yml]
 images:
   - name: ghcr.io/neal006/minutes
-    newTag: e3e5c0432d260392ce03cc8eef529eb98df22363 # set by CI
+    newTag: 8f90100b666521e71aa0e1d2c025939a9d595060 # set by CI
