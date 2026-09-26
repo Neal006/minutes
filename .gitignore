@@ -9,3 +9,5 @@ e2e/report/
 e2e/.results/
 apps/server/case-studies/audio/
 deploy/secrets/*.env
+e2e/live-report/
+e2e/.live-results/

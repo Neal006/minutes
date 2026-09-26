@@ -50,7 +50,11 @@ export function createOpenRouterClient(env = process.env): OpenRouterClient {
 /** Which model actually served a call (the fallback chain can pick any of them), and how long it took. */
 export interface CallEvent {
   task: 'transcribe' | 'notes' | 'answer';
+  /** Who served it: `openrouter`, the STT API host (e.g. `api.groq.com`), or `local`. */
+  provider: string;
   model: string;
+  /** The provider's response id (OpenRouter `gen-…`, Groq `req_…`), for audit against their logs. */
+  id?: string;
   ms: number;
 }
 export type OnCall = (e: CallEvent) => void;
@@ -71,7 +75,8 @@ async function send(client: OpenRouterClient, task: CallEvent['task'], request: 
     // 401/402/403… won't fix themselves: tell the pipeline not to burn quota retrying.
     throw Object.assign(new Error(`OpenRouter ${status}: ${message}`), { retryable: status === 408 || status === 429 || status >= 500 });
   }
-  onCall?.({ task, model: 'model' in res ? res.model : 'unknown', ms: Math.round(performance.now() - t0) });
+  const done = 'model' in res ? { model: res.model, id: res.id } : { model: 'unknown' };
+  onCall?.({ task, provider: 'openrouter', ...done, ms: Math.round(performance.now() - t0) });
   return res;
 }
 

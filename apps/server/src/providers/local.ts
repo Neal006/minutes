@@ -44,7 +44,7 @@ export function localStt(env = process.env, onCall?: OnCall): Stt {
       const run = async (): Promise<SttSegment[]> => {
         const t0 = performance.now();
         const out = await (await load())(pcm, { return_timestamps: true });
-        onCall?.({ task: 'transcribe', model: `local:${model}`, ms: Math.round(performance.now() - t0) });
+        onCall?.({ task: 'transcribe', provider: 'local', model: `local:${model}`, ms: Math.round(performance.now() - t0) });
         const chunks = out.chunks?.length ? out.chunks : [{ timestamp: [0, info.durationSec] as [number, number], text: out.text }];
         return chunks
           .map((c) => ({ start: c.timestamp[0], end: c.timestamp[1] ?? info.durationSec, text: c.text.trim() }))

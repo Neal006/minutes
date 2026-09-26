@@ -3,7 +3,8 @@ import { test } from 'node:test';
 import { cleanExtraction, parseJsonLoose, splitTimed, type Extraction } from '../src/ai.ts';
 import { createAi } from '../src/providers/index.ts';
 import { localStt } from '../src/providers/local.ts';
-import { cleanTranscript, DEFAULT_NOTES_MODELS, DEFAULT_STT_MODELS, isFreeModel, openRouterLlm, openRouterStt, type OpenRouterClient } from '../src/providers/openrouter.ts';
+import { whisperStt } from '../src/providers/whisper.ts';
+import { cleanTranscript, DEFAULT_NOTES_MODELS, DEFAULT_STT_MODELS, isFreeModel, openRouterLlm, openRouterStt, type CallEvent, type OpenRouterClient } from '../src/providers/openrouter.ts';
 import { encodeWav, isSilentWav, rmsDbfs, sliceWav, wavInfo } from '../src/wav.ts';
 
 const RATE = 16_000;
@@ -179,6 +180,27 @@ test('OpenRouter: only free models unless OPENROUTER_ALLOW_PAID=1', () => {
   assert.throws(() => openRouterStt(client, { OPENROUTER_STT_MODELS: 'google/gemini-3-pro' }), /google\/gemini-3-pro/);
   assert.doesNotThrow(() => openRouterLlm(client, { OPENROUTER_MODELS: 'openai/gpt-5', OPENROUTER_ALLOW_PAID: '1' }));
   assert.doesNotThrow(() => openRouterLlm(client, { OPENROUTER_MODELS: 'a/one:free,openrouter/free' }));
+});
+
+test('every provider call reports where it came from: provider, model, response id', async () => {
+  const events: CallEvent[] = [];
+  const onCall = (e: CallEvent) => events.push(e);
+
+  await openRouterLlm(fakeClient([JSON.stringify(GOOD)]).client, {}, onCall).extract('[0:01] hi');
+  assert.deepEqual({ ...events[0], ms: 0 }, { task: 'notes', provider: 'openrouter', model: 'fake/model:free', id: 'gen-1', ms: 0 });
+
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async () =>
+    new Response(JSON.stringify({ text: 'hello there', segments: [{ start: 0, end: 1, text: ' hello there' }], x_groq: { id: 'req_groq1' } }), {
+      headers: { 'content-type': 'application/json' },
+    });
+  try {
+    const stt = whisperStt({ STT_API_KEY: 'k', STT_BASE_URL: 'https://api.groq.com/openai/v1', STT_MODEL: 'whisper-large-v3-turbo' }, onCall);
+    assert.deepEqual(await stt.transcribe(tone(1, 0.3), 'audio/wav'), [{ start: 0, end: 1, text: 'hello there' }]);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+  assert.deepEqual({ ...events[1], ms: 0 }, { task: 'transcribe', provider: 'api.groq.com', model: 'whisper-large-v3-turbo', id: 'req_groq1', ms: 0 });
 });
 
 test('local Whisper validates input before loading the model', async () => {

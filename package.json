@@ -17,7 +17,8 @@
     "e2e:obscura": "npm run build && node scripts/get-obscura.mjs && playwright test --project=obscura",
     "models:free": "npm run models:free -w apps/server",
     "case-studies": "npm run case-studies -w apps/server",
-    "typecheck": "npm run typecheck -w apps/server && npm run typecheck -w apps/web"
+    "typecheck": "npm run typecheck -w apps/server && npm run typecheck -w apps/web",
+    "e2e:live": "npm run build && playwright test -c playwright.live.config.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

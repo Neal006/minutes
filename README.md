@@ -223,8 +223,9 @@ lists what's free right now and which models support audio and JSON schema; over
 
 | command | what |
 |---|---|
-| `npm test` | 16 server tests: real HTTP + SQLite with a fake AI, the OpenRouter adapter against a fake SDK client (request shape, repair round, 402 fail-fast), local-Whisper input validation, WAV parsing, silence gate, provider selection, and `cleanExtraction` on run 1's real output |
+| `npm test` | 18 server tests (incl. the free-model guard and per-call provenance): real HTTP + SQLite with a fake AI, the OpenRouter adapter against a fake SDK client (request shape, repair round, 402 fail-fast), local-Whisper input validation, WAV parsing, silence gate, provider selection, and `cleanExtraction` on run 1's real output |
 | `npm run e2e` | 17 end-to-end tests: 11 user-behavior flows in **[Obscura](https://github.com/h4ckf0r0day/obscura)** (browse notes, search → jump to the moment, ask → follow a citation, rename, delete confirm, resume an interrupted recording, failed notes → Try again, HTML-injection safety…), plus 6 recording/interaction tests in Chromium with a fake mic. See [`e2e/README.md`](e2e/README.md) |
+| `npm run e2e:live` | **nothing mocked**: Chromium's mic plays a synthesized meeting into the real UI; Groq transcribes it, free OpenRouter models write the notes and answer an Ask. Every AI call is logged with the provider's response id, and each OpenRouter `gen-…` id is checked against OpenRouter's generation log (model served, $0 cost). Needs keys (`LIVE_ENV_FILE`, default `.env`) and Windows voices; not in CI |
 | `npm run case-studies` | the 5 real-audio case studies above |
 | `npm run typecheck` / `npm run build` | server + web |
 

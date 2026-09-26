@@ -1,4 +1,4 @@
-import { mkdirSync } from 'node:fs';
+import { appendFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { createApp } from './app.ts';
 import { openDb } from './db.ts';
@@ -8,7 +8,15 @@ const root = path.resolve(import.meta.dirname, '../../..');
 const dataDir = path.resolve(process.env.DATA_DIR ?? path.join(root, 'data'));
 mkdirSync(dataDir, { recursive: true });
 
-const { ai, description } = createAi();
+// One line per AI call: who served it, which model, and the provider's response id (no content).
+// AI_CALL_LOG=<file> also appends them as JSON lines, e.g. for the live e2e provenance check.
+const callLog = process.env.AI_CALL_LOG;
+const { ai, description } = createAi(process.env, {
+  onCall: (e) => {
+    console.log(`[ai] ${e.task} ← ${e.provider} ${e.model} ${e.id ?? '(no id)'} ${e.ms} ms`);
+    if (callLog) appendFileSync(callLog, `${JSON.stringify({ ...e, at: new Date().toISOString() })}\n`);
+  },
+});
 const { app, pipeline } = createApp({
   db: openDb(path.join(dataDir, 'minutes.db')),
   ai,

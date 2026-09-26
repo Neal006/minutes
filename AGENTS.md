@@ -8,7 +8,7 @@ Minutes: AI meeting notes (record → live transcript → AI notes → search/as
 Node 22, npm workspaces, TypeScript 7, Express 5, better-sqlite3 (FTS5), React 19 + Vite 8, Electron 44, @openrouter/sdk, @anthropic-ai/sdk, @huggingface/transformers (local Whisper), zod 4, Playwright + Obscura.
 - install: `npm install` (Electron binary missing? `node node_modules/electron/install.js`; e2e needs `npx playwright install chromium`)
 - dev: `npm run dev` (API :3001 + Vite :5173) · offline: `AI_PROVIDER=mock npm run dev` · seed: `npm run seed`
-- test: `npm test` (17) · e2e: `npm run e2e` (17: Obscura + Chromium) · case studies: `npm run case-studies` (needs OPENROUTER_API_KEY; `-- --audio-only` offline)
+- test: `npm test` (18) · live e2e (real keys, no mocks): `LIVE_ENV_FILE=.env npm run e2e:live` · e2e: `npm run e2e` (17: Obscura + Chromium) · case studies: `npm run case-studies` (needs OPENROUTER_API_KEY; `-- --audio-only` offline)
 - free models now: `npm run models:free` · typecheck: `npm run typecheck` · build: `npm run build` · docker: `docker build -t minutes .`
 
 ## Current State & Focus
@@ -62,6 +62,8 @@ createAi(env, hooks) picks providers; tests inject fakes via createApp({ ai }).
 - `openrouter/free` can route to unsuitable free models (content-safety classifier answered an Ask in the 2026-09-26 run).
 - get-obscura.mjs uses System32 tar.exe on Windows: Git Bash's GNU tar reads `C:` as a remote host.
 - kustomize `namespace:` stamps cluster-scoped CRs (ClusterIssuer) too; deploy/k8s relies on Argo's destination namespace.
+- OpenRouter's generation log (GET /api/v1/generation?id=gen-…) stores dated slugs (`…-20260811:free`) for the alias the chat API returns; compare with the date stripped. Stats appear a few seconds after the call.
+- Groq transcription ids: `x_groq.id` in verbose_json, `x-request-id` header as fallback.
 - CI `deploy` job pins newTag to the SHA with [skip ci], only after check/e2e/manifests/docker pass.
 
 ## Decisions Log
@@ -76,6 +78,7 @@ createAi(env, hooks) picks providers; tests inject fakes via createApp({ ai }).
 - 2026-09-24 — deploy: Oracle A1 + Cloudflare Tunnel/Access + Litestream→R2; Groq Whisper for prod STT — $0, no open ports
 
 ## Changelog
+- 2026-09-26 | live e2e (real UI + Groq + OpenRouter, provenance verified via OpenRouter generation log); CallEvent gets provider + id, Whisper/Groq calls now reported; server logs every AI call (AI_CALL_LOG JSONL) | providers/{openrouter,whisper,local,index}.ts, index.ts, e2e/live/*, playwright.live.config.ts | prove responses' origin with provider ids, not trust
 - 2026-09-26 | Argo CD GitOps deploy; e2e 17/17; real free-model run 44/55 (10 owner misses need diarization); Obscura tar fix | deploy/{argocd,k8s,secrets,bootstrap.sh}, ci.yml, get-obscura.mjs, docs/DEPLOY-ARGOCD.md | manifests schema-checked in CI; secrets only via kubectl
 - 2026-09-26 | enforce free OpenRouter models; verified defaults still free via models:free | providers/openrouter.ts, test/providers.test.ts, .env.example | fail fast at boot, not per request
 - 2026-09-24 | local Whisper default STT, cleanExtraction, scorer split (task vs owner), case-study run 2, README HLD/LLD/stack/case studies | ai.ts, pipeline.ts, providers/local.ts, case-studies/run.ts, test/providers.test.ts, README.md, docs/* | post-process model output; schema validation alone isn't enough

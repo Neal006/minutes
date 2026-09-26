@@ -36,7 +36,7 @@ export function createAi(env = process.env, hooks: AiHooks = {}): { ai: Ai; desc
 
   const llm: Llm = llmName === 'openrouter' ? openRouterLlm(openRouter, env, hooks.onCall) : llmName === 'anthropic' ? anthropicLlm(env) : mock;
   const stt: Stt =
-    sttName === 'local' ? localStt(env, hooks.onCall) : sttName === 'openrouter' ? openRouterStt(openRouter, env, hooks.onCall) : sttName === 'whisper' ? whisperStt(env) : mock;
+    sttName === 'local' ? localStt(env, hooks.onCall) : sttName === 'openrouter' ? openRouterStt(openRouter, env, hooks.onCall) : sttName === 'whisper' ? whisperStt(env, hooks.onCall) : mock;
 
   return {
     ai: {
