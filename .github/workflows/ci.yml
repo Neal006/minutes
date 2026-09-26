@@ -37,6 +37,21 @@ jobs:
         if: failure()
         with: { name: e2e-report, path: e2e/report }
 
+  manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Render and schema-check the Argo CD / k8s manifests
+        run: |
+          curl -sSLo kc.tgz https://github.com/yannh/kubeconform/releases/download/v0.8.0/kubeconform-linux-amd64.tar.gz
+          echo "9bc2bffbf71f261128533edaf912153948b7ff238f9a531ae6d34466ec287883  kc.tgz" | sha256sum -c -
+          tar xzf kc.tgz kubeconform
+          kubectl kustomize deploy/k8s > rendered.yaml
+          ./kubeconform -strict -summary \
+            -schema-location default \
+            -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+            rendered.yaml deploy/argocd
+
   docker:
     runs-on: ubuntu-latest
     steps:
@@ -59,3 +74,30 @@ jobs:
           docker buildx create --use
           docker run --privileged --rm tonistiigi/binfmt --install arm64
           docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/neal006/minutes:latest -t ghcr.io/neal006/minutes:${{ github.sha }} --push .
+
+  # GitOps: pin the image just published in deploy/k8s; Argo CD notices the commit and rolls it out.
+  # Runs only when every check passed. Pushes made with GITHUB_TOKEN never start another workflow run,
+  # and [skip ci] makes that explicit, so this cannot loop.
+  deploy:
+    needs: [check, e2e, manifests, docker]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency: { group: deploy, cancel-in-progress: false }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pin image tag for Argo CD
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Re-apply the bump on the latest main each attempt, so a concurrent push can't cause a conflict.
+          for attempt in 1 2 3 4 5; do
+            git fetch -q origin main && git reset -q --hard origin/main
+            sed -i -E "s/^(\s*newTag:).*/\1 ${GITHUB_SHA} # set by CI/" deploy/k8s/kustomization.yaml
+            git diff --quiet && exit 0
+            git commit -qam "chore(deploy): minutes image ${GITHUB_SHA::7} [skip ci]"
+            git push -q origin HEAD:main && exit 0
+            sleep $((attempt * 5))
+          done
+          echo "could not push the image bump after 5 attempts" >&2; exit 1

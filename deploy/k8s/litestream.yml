@@ -1,0 +1,12 @@
+# Continuous SQLite replication to any S3-compatible bucket (Oracle Object Storage, R2, …).
+# Credentials and location come from the minutes-backup secret.
+dbs:
+  - path: /data/minutes.db
+    replicas:
+      - type: s3
+        bucket: ${LITESTREAM_BUCKET}
+        path: litestream/minutes.db
+        endpoint: ${LITESTREAM_ENDPOINT}
+        region: ${LITESTREAM_REGION}
+        force-path-style: true
+        retention: 168h # a week of point-in-time restore

@@ -1,0 +1,11 @@
+# SQLite DB, playback audio and the local Whisper model cache. k3s's local-path provisioner keeps it
+# on the VM's block volume; Litestream streams the DB to object storage.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minutes-data
+spec:
+  accessModes: [ReadWriteOnce]
+  resources:
+    requests:
+      storage: 20Gi

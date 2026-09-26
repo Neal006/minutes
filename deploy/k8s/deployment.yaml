@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minutes
+  labels: { app: minutes }
+spec:
+  replicas: 1 # SQLite has a single writer: never scale this out
+  strategy: { type: Recreate } # the old pod must release the DB before the new one opens it
+  selector:
+    matchLabels: { app: minutes }
+  template:
+    metadata:
+      labels: { app: minutes }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000 # the image's `node` user
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile: { type: RuntimeDefault }
+      initContainers:
+        # Fresh node or lost volume: pull the DB back from the bucket before the app starts.
+        - name: restore
+          image: litestream/litestream:0.3.13
+          args: [restore, -if-db-not-exists, -if-replica-exists, -config, /etc/litestream.yml, /data/minutes.db]
+          envFrom: [{ secretRef: { name: minutes-backup } }]
+          securityContext: &locked
+            allowPrivilegeEscalation: false
+            capabilities: { drop: [ALL] }
+          volumeMounts: &mounts
+            - { name: data, mountPath: /data }
+            - { name: litestream, mountPath: /etc/litestream.yml, subPath: litestream.yml, readOnly: true }
+        # Native sidecar (restartPolicy: Always, Kubernetes ≥ 1.29): replicates for the pod's lifetime.
+        - name: litestream
+          image: litestream/litestream:0.3.13
+          args: [replicate, -config, /etc/litestream.yml]
+          restartPolicy: Always
+          envFrom: [{ secretRef: { name: minutes-backup } }]
+          securityContext: *locked
+          resources:
+            requests: { cpu: 20m, memory: 32Mi }
+            limits: { memory: 128Mi }
+          volumeMounts: *mounts
+      containers:
+        - name: app
+          image: ghcr.io/neal006/minutes
+          ports: [{ name: http, containerPort: 3001 }]
+          envFrom: [{ secretRef: { name: minutes-env } }]
+          env:
+            - { name: DATA_DIR, value: /data }
+          securityContext: *locked
+          readinessProbe:
+            httpGet: { path: /api/health, port: http }
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /api/health, port: http }
+            initialDelaySeconds: 20
+            periodSeconds: 30
+          resources:
+            requests: { cpu: 250m, memory: 384Mi }
+            limits: { memory: 2Gi } # headroom for local Whisper if STT_PROVIDER=local
+          volumeMounts:
+            - { name: data, mountPath: /data }
+      volumes:
+        - name: data
+          persistentVolumeClaim: { claimName: minutes-data }
+        - name: litestream
+          configMap: { name: litestream }

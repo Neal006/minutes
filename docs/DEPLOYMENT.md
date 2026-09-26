@@ -1,5 +1,8 @@
 # Deploying Minutes for $0: system design
 
+> Prefer GitOps, or everything on one provider? [DEPLOY-ARGOCD.md](DEPLOY-ARGOCD.md) runs the same app with
+> k3s + Argo CD on the Oracle VM alone (Object Storage backups, Traefik + Let's Encrypt, basic auth).
+
 **Goal:** run Minutes for a small team (≤ 50 people) with real login, HTTPS, backups and CI/CD, with no
 monthly bill. Every component below has a free tier that covers this workload. The one thing that
 *may* cost money is a domain name (≈ $10/yr); two $0 alternatives are given in §7.

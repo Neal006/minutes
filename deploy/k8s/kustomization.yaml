@@ -1,0 +1,20 @@
+# Minutes on Kubernetes (k3s), synced by Argo CD from this folder. See docs/DEPLOY-ARGOCD.md.
+# Secrets are created once with kubectl (never committed): minutes-env, minutes-backup, minutes-basic-auth.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# No `namespace:` here: kustomize would stamp it onto the cluster-scoped ClusterIssuer too. Argo CD's
+# destination namespace (minutes) places the namespaced resources instead.
+resources:
+  - namespace.yaml
+  - pvc.yaml
+  - deployment.yaml
+  - service.yaml
+  - middleware.yaml
+  - ingress.yaml
+  - cluster-issuer.yaml
+configMapGenerator:
+  - name: litestream
+    files: [litestream.yml]
+images:
+  - name: ghcr.io/neal006/minutes
+    newTag: latest # CI rewrites this to the commit SHA after each image publish

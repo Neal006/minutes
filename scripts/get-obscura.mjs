@@ -28,7 +28,9 @@ if (existsSync(bin)) {
   mkdirSync(dir, { recursive: true });
   const archive = path.join(dir, asset);
   writeFileSync(archive, Buffer.from(await res.arrayBuffer()));
-  execFileSync('tar', ['-xf', archive, '-C', dir]); // bsdtar on Windows 10+ also extracts .zip
+  // Windows' own bsdtar extracts .zip; Git Bash's GNU tar would read "C:" as a remote host.
+  const tar = process.platform === 'win32' ? path.join(process.env.SystemRoot ?? 'C:\\Windows', 'System32', 'tar.exe') : 'tar';
+  execFileSync(tar, ['-xf', archive, '-C', dir]);
   rmSync(archive);
   if (process.platform !== 'win32') chmodSync(bin, 0o755);
   if (!existsSync(bin)) throw new Error(`Archive did not contain ${path.basename(bin)}`);

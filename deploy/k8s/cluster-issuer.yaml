@@ -1,0 +1,15 @@
+# Free TLS certificates from Let's Encrypt via HTTP-01 through Traefik. cert-manager itself is
+# installed by deploy/argocd/apps/cert-manager.yaml (an earlier sync wave).
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef: { name: letsencrypt-account }
+    solvers:
+      - http01:
+          ingress: { ingressClassName: traefik }

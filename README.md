@@ -237,6 +237,9 @@ Oracle Cloud Always Free VM + Cloudflare Tunnel/Access + Litestream→R2 backups
 security model, RPO/RTO, runbook, scaling path) is in [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), and the
 Compose stack is in [`deploy/`](deploy/).
 
+**GitOps option, one platform:** k3s + Argo CD on the same Oracle VM, with Oracle Object Storage for backups
+and Traefik + Let's Encrypt for HTTPS. Merging to `main` deploys. See [`docs/DEPLOY-ARGOCD.md`](docs/DEPLOY-ARGOCD.md).
+
 ## Project layout
 
 ```

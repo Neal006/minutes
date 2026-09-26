@@ -1,5 +1,5 @@
 # AGENTS.md — Project Memory (auto-maintained)
-Last updated: 2026-09-26 | Sessions logged: 4
+Last updated: 2026-09-26 | Sessions logged: 5
 
 ## Identity
 Minutes: AI meeting notes (record → live transcript → AI notes → search/ask). Portfolio project targeting the Circleback SWE intern role.
@@ -40,7 +40,8 @@ createAi(env, hooks) picks providers; tests inject fakes via createApp({ ai }).
 - apps/web/src/pages/{Home,Meeting,Search,Ask}.tsx; App.tsx
 - apps/desktop/main.cjs, preload.cjs — Electron shell, loopback audio
 - e2e/{behavior,interactions,recording}.spec.ts, fixtures.ts; playwright.config.ts; scripts/get-obscura.mjs
-- Dockerfile, deploy/{docker-compose.yml,litestream.yml,.env.example}; docs/{PLAN,DEPLOYMENT}.md
+- Dockerfile, deploy/{docker-compose.yml,litestream.yml,.env.example}; docs/{PLAN,DEPLOYMENT}.md (compose path)
+- deploy/argocd/{root.yaml,apps/*} — app-of-apps (cert-manager wave -1, minutes wave 0); deploy/k8s/ — kustomize: 1 replica Recreate, Litestream restore init + native sidecar, Traefik basic-auth/https-redirect, ClusterIssuer; deploy/bootstrap.sh — k3s + Argo CD + secrets on one VM; deploy/secrets/*.env.example; docs/DEPLOY-ARGOCD.md
 
 ## Conventions
 - Server imports use `.ts` extensions (tsx runtime in dev and prod, noEmit tsc).
@@ -57,6 +58,11 @@ createAi(env, hooks) picks providers; tests inject fakes via createApp({ ai }).
 - Obscura 0.2.3: needs `--allow-private-network` for localhost; link clicks don't navigate; `location.hash=` no-op; keydown preventDefault ignored for text; React checkbox onChange doesn't fire; no getUserMedia. See e2e/README.md.
 - Playwright getByRole name matching is substring: use `exact: true` ("Delete" vs "Click again to delete").
 - Oracle Always Free A1 is 2 OCPU/12 GB since 2026-06.
+- Groq free plan (checked 2026-09-26): whisper-large-v3-turbo 20 RPM, 2K RPD, 7.2K audio-s/h, 28.8K audio-s/day.
+- `openrouter/free` can route to unsuitable free models (content-safety classifier answered an Ask in the 2026-09-26 run).
+- get-obscura.mjs uses System32 tar.exe on Windows: Git Bash's GNU tar reads `C:` as a remote host.
+- kustomize `namespace:` stamps cluster-scoped CRs (ClusterIssuer) too; deploy/k8s relies on Argo's destination namespace.
+- CI `deploy` job pins newTag to the SHA with [skip ci], only after check/e2e/manifests/docker pass.
 
 ## Decisions Log
 - 2026-09-24 — SQLite+FTS5 over Postgres — zero ops for a single-user demo
@@ -65,10 +71,12 @@ createAi(env, hooks) picks providers; tests inject fakes via createApp({ ai }).
 - 2026-09-24 — browser converts chunks to 16 kHz WAV — accepted by every STT incl. OpenRouter audio models
 - 2026-09-24 — delete chunk files after transcription — ~8x less disk/backup
 - 2026-09-24 — local Whisper default STT — OpenRouter audio needs paid balance; local is $0 and private
+- 2026-09-26 — k3s + Argo CD on one Oracle A1 VM (Object Storage backups, Traefik + Let's Encrypt, basic auth); compose kept as the simplest path — one platform, GitOps, $0
 - 2026-09-26 — reject non-:free OpenRouter ids at boot (opt-in OPENROUTER_ALLOW_PAID=1) — a bad env var must never bill
 - 2026-09-24 — deploy: Oracle A1 + Cloudflare Tunnel/Access + Litestream→R2; Groq Whisper for prod STT — $0, no open ports
 
 ## Changelog
+- 2026-09-26 | Argo CD GitOps deploy; e2e 17/17; real free-model run 44/55 (10 owner misses need diarization); Obscura tar fix | deploy/{argocd,k8s,secrets,bootstrap.sh}, ci.yml, get-obscura.mjs, docs/DEPLOY-ARGOCD.md | manifests schema-checked in CI; secrets only via kubectl
 - 2026-09-26 | enforce free OpenRouter models; verified defaults still free via models:free | providers/openrouter.ts, test/providers.test.ts, .env.example | fail fast at boot, not per request
 - 2026-09-24 | local Whisper default STT, cleanExtraction, scorer split (task vs owner), case-study run 2, README HLD/LLD/stack/case studies | ai.ts, pipeline.ts, providers/local.ts, case-studies/run.ts, test/providers.test.ts, README.md, docs/* | post-process model output; schema validation alone isn't enough
 - 2026-09-24 | OpenRouter providers, WAV pipeline, Obscura e2e, case-study harness, $0 deploy design | apps/server/src/providers/*, wav.ts, e2e/*, apps/server/case-studies/*, Dockerfile, deploy/*, docs/DEPLOYMENT.md | provider abstraction + mock for e2e

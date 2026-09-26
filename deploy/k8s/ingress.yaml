@@ -1,0 +1,22 @@
+# CHANGE the host (both places) to your domain, or use the VM's public IP with sslip.io for a free
+# hostname with no DNS setup: 203.0.113.10 → minutes.203-0-113-10.sslip.io
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minutes
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/router.middlewares: minutes-https-redirect@kubernetescrd,minutes-basic-auth@kubernetescrd
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts: [minutes.203-0-113-10.sslip.io]
+      secretName: minutes-tls
+  rules:
+    - host: minutes.203-0-113-10.sslip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service: { name: minutes, port: { name: http } }
